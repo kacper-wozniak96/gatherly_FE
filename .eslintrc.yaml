@@ -1,0 +1,119 @@
+extends:
+    - 'eslint:recommended'
+    - 'plugin:react/recommended'
+    - 'plugin:@typescript-eslint/recommended'
+    - 'plugin:prettier/recommended'
+    - 'plugin:promise/recommended'
+    - 'plugin:react-hooks/recommended'
+    - 'plugin:react-redux/recommended'
+    - 'plugin:jsx-a11y/recommended'
+    - 'plugin:import/errors'
+    - 'plugin:import/warnings'
+    - 'plugin:import/typescript'
+    - 'plugin:react/jsx-runtime'
+parser: '@typescript-eslint/parser'
+parserOptions:
+    ecmaFeatures:
+        jsx: true
+    ecmaVersion: 11
+    sourceType: module
+plugins:
+    - react
+    - '@typescript-eslint'
+    - prettier
+    - promise
+    - react-redux
+    - jsx-a11y
+    - import
+rules:
+    'react/display-name':
+        - off
+    '@typescript-eslint/no-explicit-any':
+        - off
+    '@typescript-eslint/no-unused-vars':
+        - off
+    'promise/no-nesting':
+        - off
+    'prettier/prettier':
+        - error
+    'sonarjs/no-small-switch':
+        - off
+    '@typescript-eslint/no-extra-semi':
+        - off
+    'promise/catch-or-return':
+        - off
+    'promise/always-return':
+        - off
+    'react-hooks/exhaustive-deps':
+        - off
+    'jsx-a11y/click-events-have-key-events':
+        - off
+    'jsx-a11y/no-static-element-interactions':
+        - off
+    '@typescript-eslint/ban-ts-comment':
+        - off
+    'sonarjs/cognitive-complexity':
+        - off
+    'react-redux/useSelector-prefer-selectors':
+        - off
+    '@typescript-eslint/no-empty-function':
+        - off
+    'react/prop-types':
+        - off
+    'react/jsx-uses-react':
+        - off
+    'react/react-in-jsx-scope':
+        - off
+    'import/no-unresolved':
+        - off
+    '@typescript-eslint/explicit-module-boundary-types':
+        - off
+    'import/order':
+        - error
+        - groups:
+              - builtin
+              - external
+              - internal
+              - parent
+              - sibling
+              - index
+              - object
+          alphabetize:
+              order: asc
+              caseInsensitive: true
+          pathGroups:
+              - pattern: '@fullcalendar/react'
+                group: internal
+                position: before
+              - pattern: '@fullcalendar/**'
+                group: internal
+                position: before
+              - pattern: '@mui/**'
+                group: internal
+                position: before
+              - pattern: '@skillchill/**'
+                group: internal
+                position: before
+              - pattern: '@skillandchill/**'
+                group: internal
+                position: before
+              - pattern: '@/**'
+                group: internal
+                position: after
+              - pattern: 'view/**'
+                group: internal
+                position: after
+              - pattern: 'public/**'
+                group: internal
+                position: after
+              - pattern: '@**/**'
+                group: external
+                position: after
+              - pattern: '@**/**'
+                group: internal
+                position: after
+          pathGroupsExcludedImportTypes: []
+          newlines-between: always
+settings:
+    react:
+        version: 'detect'
