@@ -1,43 +1,42 @@
 import { Button, Card, Typography } from '@mui/material';
 import { useState } from 'react';
 import { EInputType, Input } from '../../components/Input';
-import { useCreateUserMutation } from '../../services/redux/reducers/user';
-import { CreateUserDTO } from '../../types/user';
+import { useCreateUserMutation, useLoginUserMutation } from '../../services/redux/reducers/user';
+import { LoginUserDTO, LoginUserResponseDTO } from '../../types/user';
 import { useStyles } from './styles';
 import { initialFormState } from './utils/initialFormState';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import Cookies from 'js-cookie';
 
-export const SignUp = () => {
+export const SignIn = () => {
 	const { classes } = useStyles();
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 
-	const [formState, setFormState] = useState<CreateUserDTO>(initialFormState);
+	const [formState, setFormState] = useState<LoginUserDTO>(initialFormState);
 
-	const [createUser, { isLoading }] = useCreateUserMutation();
+	const [loginUser, { isLoading }] = useLoginUserMutation();
 
-	const handleFormChange = (inputName: keyof CreateUserDTO, value: string) => {
+	const handleFormChange = (inputName: keyof LoginUserDTO, value: string) => {
 		setFormState((prevState) => ({
 			...prevState,
 			[inputName]: value,
 		}));
 	};
 
-	const handleSignUp = async () => {
+	const handleSignIn = async () => {
 		try {
-			await createUser(formState);
-			enqueueSnackbar('Account has been created', {
-				variant: 'success',
-			});
-			handleNavigateToSignIn();
+			const { accessToken } = await loginUser(formState).unwrap();
+			Cookies.set('accessToken', accessToken);
+			navigate('/home');
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	const handleNavigateToSignIn = () => {
-		navigate('/signIn');
+	const handleNavigateToSignUp = () => {
+		navigate('/signUp');
 	};
 
 	return (
@@ -47,32 +46,32 @@ export const SignUp = () => {
 				<div className={classes.fieldsWrapper}>
 					<div className={classes.hasAccountWrapper}>
 						<Typography variant="h5" className={classes.hasAccountText}>
-							Already have an account?
+							Don't have an account?
 						</Typography>
 						<Button
 							variant="contained"
 							className={classes.hasAccountButton}
-							onClick={handleNavigateToSignIn}
+							onClick={handleNavigateToSignUp}
 						>
-							Sign In
+							Sign Up
 						</Button>
 					</div>
 					<Typography variant="h3" className={classes.title}>
 						Welcome to Gatherly!
 					</Typography>
 					<Typography className={classes.subTitle} variant="h5">
-						Register your account
+						Login to your account
 					</Typography>
 
 					<div className={classes.inputWrapper}>
-						<Input<keyof CreateUserDTO>
+						<Input<keyof LoginUserDTO>
 							label="Username"
 							isRequired
-							value={formState.userName}
+							value={formState.username}
 							onChange={handleFormChange}
-							inputName="userName"
+							inputName="username"
 						/>
-						<Input<keyof CreateUserDTO>
+						<Input<keyof LoginUserDTO>
 							label="Password"
 							type={EInputType.PASSWORD}
 							isRequired
@@ -80,23 +79,15 @@ export const SignUp = () => {
 							inputName="password"
 							onChange={handleFormChange}
 						/>
-						<Input<keyof CreateUserDTO>
-							label="Confirm password"
-							type={EInputType.PASSWORD}
-							isRequired
-							value={formState.confirmPassword}
-							inputName="confirmPassword"
-							onChange={handleFormChange}
-						/>
 					</div>
 					<Button
 						className={classes.SignUpButton}
 						variant="contained"
 						size="large"
-						onClick={handleSignUp}
+						onClick={handleSignIn}
 						disabled={isLoading}
 					>
-						Sign up
+						Sign in
 					</Button>
 				</div>
 			</Card>

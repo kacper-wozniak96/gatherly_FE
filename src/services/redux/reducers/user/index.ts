@@ -1,6 +1,6 @@
 // Import the RTK Query methods from the React-specific entry point
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { CreateUserDTO } from '../../../../types/user';
+import { CreateUserDTO, LoginUserDTO, LoginUserResponseDTO } from '../../../../types/user';
 
 export const userSlice = createApi({
 	reducerPath: 'user',
@@ -15,7 +15,15 @@ export const userSlice = createApi({
 				body: createUserDTO,
 			}),
 		}),
+
+		loginUser: builder.mutation<LoginUserResponseDTO, LoginUserDTO>({
+			query: (loginUserDTO: LoginUserDTO) => ({
+				url: '/login',
+				method: 'POST',
+				body: loginUserDTO,
+			}),
+		}),
 	}),
 });
 
-export const { useCreateUserMutation } = userSlice;
+export const { useCreateUserMutation, useLoginUserMutation } = userSlice;
