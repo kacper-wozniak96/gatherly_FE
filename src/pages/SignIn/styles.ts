@@ -1,12 +1,11 @@
+import { Theme } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 
-export const useStyles = makeStyles()((theme) => ({
+export const useStyles = makeStyles()((theme: Theme) => ({
 	container: {
 		width: '100vw',
 		height: '100vh',
-		// maxWidth: '100%',
-		// maxHeight: '100%',
-		backgroundColor: '#edf6ff',
+		backgroundColor: theme.palette.customBackground?.main,
 	},
 
 	card: {

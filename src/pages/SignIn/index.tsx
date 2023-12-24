@@ -29,7 +29,7 @@ export const SignIn = () => {
 		try {
 			const { accessToken } = await loginUser(formState).unwrap();
 			Cookies.set('accessToken', accessToken);
-			navigate('/home');
+			navigate('/dashboard');
 		} catch (error) {
 			console.log(error);
 		}

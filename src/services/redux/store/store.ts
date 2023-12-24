@@ -6,5 +6,5 @@ export default configureStore({
 		user: userSlice.reducer,
 	},
 
-	// middleware: (getDefaultMiddleware) => {},
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userSlice.middleware),
 });

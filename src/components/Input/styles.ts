@@ -10,7 +10,7 @@ export const useStyles = makeStyles()((theme) => ({
 		width: '100%',
 
 		'& input': {
-			padding: '1rem 0.5rem',
+			// padding: '1rem 0.5rem',
 			fontSize: '1.5rem',
 		},
 	},

@@ -5,9 +5,7 @@ export const useStyles = makeStyles()((theme) => ({
 	container: {
 		width: '100vw',
 		height: '100vh',
-		// maxWidth: '100%',
-		// maxHeight: '100%',
-		backgroundColor: '#edf6ff',
+		backgroundColor: theme.palette.customBackground?.main,
 	},
 
 	card: {

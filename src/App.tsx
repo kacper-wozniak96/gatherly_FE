@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { PrivateRoutes } from './components/routes/PrivateRoutes';
 import { SignUp } from './pages/SignUp';
 import { SignIn } from './pages/SignIn';
+import { Dashboard } from './pages/Dashboard';
 
 export function App() {
 	console.log('siema');
@@ -10,8 +11,8 @@ export function App() {
 		<Router>
 			<Routes>
 				<Route element={<PrivateRoutes />}>
-					<Route path="/home" element={<div>home</div>} />
-					<Route path="*" element={<Navigate to={'/home'} />} />
+					<Route path="/dashboard" element={<Dashboard />} />
+					<Route path="*" element={<Navigate to={'/dashboard'} />} />
 				</Route>
 				<Route path="/signIn" element={<SignIn />} />
 				<Route path="/signup" element={<SignUp />} />
