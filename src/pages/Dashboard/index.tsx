@@ -1,7 +1,6 @@
-import React from 'react';
-import { useStyles } from './styles';
-import { Nav } from './Nav';
 import { Divider } from '@mui/material';
+import { Nav } from './Nav';
+import { useStyles } from './styles';
 
 export const Dashboard = () => {
 	const { classes } = useStyles();

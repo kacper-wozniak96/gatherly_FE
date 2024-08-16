@@ -1,13 +1,16 @@
 import { Button, Card, Typography } from '@mui/material';
 import { useState } from 'react';
-import { EInputType, Input } from '../../components/Input';
+// import { EInputType, Input } from '../../components/Input';
+// import { Input } from '@/components/Input';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Cookies from 'js-cookie';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
 import { useCreateUserMutation, useLoginUserMutation } from '../../services/redux/reducers/user';
 import { LoginUserDTO, LoginUserResponseDTO } from '../../types/user';
 import { useStyles } from './styles';
 import { initialFormState } from './utils/initialFormState';
-import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import Cookies from 'js-cookie';
 
 export const SignIn = () => {
 	const { classes } = useStyles();
@@ -63,8 +66,18 @@ export const SignIn = () => {
 						Login to your account
 					</Typography>
 
-					<div className={classes.inputWrapper}>
-						<Input<keyof LoginUserDTO>
+					{/* <div className={classes.inputWrapper}> */}
+					<div className="my-10 grid gap-10">
+						{/* <Label htmlFor="email">Email</Label> */}
+						<div>
+							<Label htmlFor="email">Email</Label>
+							<Input type="email" id="email" placeholder="Email" />
+						</div>
+						<div>
+							<Label htmlFor="password">Password</Label>
+							<Input type="password" id="password" placeholder="" />
+						</div>
+						{/* <Input<keyof LoginUserDTO>
 							label="Username"
 							isRequired
 							value={formState.username}
@@ -77,8 +90,8 @@ export const SignIn = () => {
 							isRequired
 							value={formState.password}
 							inputName="password"
-							onChange={handleFormChange}
-						/>
+							onChange={handleFormChange} */}
+						{/* /> */}
 					</div>
 					<Button
 						className={classes.SignUpButton}
