@@ -1,14 +1,24 @@
+import { Button } from '@/components/ui/button';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import AddIcon from '@mui/icons-material/Add';
-import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import Typography from '@mui/material/Typography';
+import { useSnackbar } from 'notistack';
 import { useState } from 'react';
-import { Input } from '../../../../components/Input';
 import { useCreatePostMutation } from '../../../../services/redux/reducers/post';
 import { CreatePostDTO } from '../../../../types/post';
 import { useStyles } from './styles';
 import { initialFormState } from './utils/initialFormState';
-import { useSnackbar } from 'notistack';
 
 export const CreateNewPost = () => {
 	const { classes } = useStyles();
@@ -43,48 +53,36 @@ export const CreateNewPost = () => {
 
 	return (
 		<div>
-			<Button variant="contained" onClick={handleOpen} startIcon={<AddIcon />}>
-				Create new post
-			</Button>
-			<Modal open={open} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-				<div className={classes.container}>
-					<Typography id="modal-modal-title" variant="h4">
-						New Post
-					</Typography>
-					<Input<keyof CreatePostDTO>
-						label="Title"
-						onChange={handleFormChange}
-						value={formState.title}
-						inputName="title"
-						isRequired
-					/>
-					<Input<keyof CreatePostDTO>
-						label="Description"
-						onChange={handleFormChange}
-						value={formState.description}
-						inputName="description"
-						textFieldProps={{
-							multiline: true,
-							minRows: 5,
-							placeholder: 'Whats on your mind? . . .',
-						}}
-					/>
-					<div>
-						<Button
-							variant="contained"
-							size="large"
-							className={classes.postButton}
-							onClick={handleCreatePost}
-							// disabled={isCreatingPost}
-						>
-							Post
-						</Button>
-						<Button size="large" onClick={handleClose} disabled={isCreatingPost}>
-							Close
-						</Button>
+			<Dialog>
+				<DialogTrigger asChild>
+					<Button>Edit Profile</Button>
+				</DialogTrigger>
+				<DialogContent className="sm:max-w-[425px]">
+					<DialogHeader>
+						<DialogTitle>Edit profile</DialogTitle>
+						<DialogDescription>
+							Make changes to your profile here. Click save when you're done.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="grid gap-4 py-4">
+						<div className="grid grid-cols-4 items-center gap-4">
+							<Label htmlFor="name" className="text-right">
+								Name
+							</Label>
+							<Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
+						</div>
+						<div className="grid grid-cols-4 items-center gap-4">
+							<Label htmlFor="username" className="text-right">
+								Username
+							</Label>
+							<Input id="username" defaultValue="@peduarte" className="col-span-3" />
+						</div>
 					</div>
-				</div>
-			</Modal>
+					<DialogFooter>
+						<Button type="submit">Save changes</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</div>
 	);
 };

@@ -1,5 +1,5 @@
 import { baseRoute } from './baseRoute';
 
-export class UserRoutes {
+export class ApiUserRoutes {
 	static login = `${baseRoute}/user/login`;
 }

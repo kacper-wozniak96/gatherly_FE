@@ -1,18 +1,19 @@
+import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UserRoutes } from '@/services/api/userRoutes';
+import { useHandleError } from '@/hooks/useHandleError';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { LoginUserResponseDTO } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Card, Typography } from '@mui/material';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Card } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
-import { useStyles } from './styles';
 
 const signInFormSchema = z.object({
 	username: z.string(),
@@ -22,16 +23,14 @@ const signInFormSchema = z.object({
 type SignInFormValues = z.infer<typeof signInFormSchema>;
 
 export const SignIn = () => {
-	const { classes } = useStyles();
 	const navigate = useNavigate();
-	const queryClient = useQueryClient();
-
 	const { enqueueSnackbar } = useSnackbar();
+	const { handleError } = useHandleError();
 
 	const {
 		register,
-		setValue,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<SignInFormValues>({
 		resolver: zodResolver(signInFormSchema),
@@ -40,21 +39,19 @@ export const SignIn = () => {
 	const { mutateAsync: signInUserMutation } = useMutation({
 		mutationFn: async (data: SignInFormValues) => {
 			try {
-				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(UserRoutes.login, data);
+				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(ApiUserRoutes.login, data);
 				const accessToken = response.data.accessToken;
 				Cookies.set('accessToken', accessToken);
-				navigate('/dashboard');
+				navigate(AppRoutes.toDashboard);
+				enqueueSnackbar('Successfully signed in', { variant: 'success' });
 			} catch (error) {
-				console.log(error);
+				handleError(error, setError);
 			}
-		},
-		onSuccess: () => {
-			enqueueSnackbar('Successfully signed in', { variant: 'success' });
 		},
 	});
 
 	const handleNavigateToSignUp = () => {
-		navigate('/signUp');
+		navigate(AppRoutes.toSignUp);
 	};
 
 	return (
@@ -81,7 +78,7 @@ export const SignIn = () => {
 								{...register('username')}
 								type="text"
 								id="username"
-								placeholder="username"
+								placeholder=""
 								errorMessage={errors.username?.message}
 							/>
 						</div>
@@ -96,7 +93,7 @@ export const SignIn = () => {
 							/>
 						</div>
 						<Button type="submit" className="text-2xl bg-emerald-500 p-8 hover:bg-emerald-500">
-							Submit
+							Log in
 						</Button>
 					</form>
 				</div>
