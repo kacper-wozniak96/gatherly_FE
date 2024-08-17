@@ -1,42 +1,59 @@
-import { Button, Card, Typography } from '@mui/material';
-import { useState } from 'react';
-// import { EInputType, Input } from '../../components/Input';
-// import { Input } from '@/components/Input';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LoginUserResponseDTO } from '@/types/user';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Card, Typography } from '@mui/material';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useCreateUserMutation, useLoginUserMutation } from '../../services/redux/reducers/user';
-import { LoginUserDTO, LoginUserResponseDTO } from '../../types/user';
+import { z } from 'zod';
 import { useStyles } from './styles';
-import { initialFormState } from './utils/initialFormState';
+
+const signInFormSchema = z.object({
+	username: z.string(),
+	password: z.string(),
+});
+
+type SignInFormValues = z.infer<typeof signInFormSchema>;
 
 export const SignIn = () => {
 	const { classes } = useStyles();
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
 	const { enqueueSnackbar } = useSnackbar();
 
-	const [formState, setFormState] = useState<LoginUserDTO>(initialFormState);
+	const {
+		register,
+		setValue,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<SignInFormValues>({
+		resolver: zodResolver(signInFormSchema),
+	});
 
-	const [loginUser, { isLoading }] = useLoginUserMutation();
-
-	const handleFormChange = (inputName: keyof LoginUserDTO, value: string) => {
-		setFormState((prevState) => ({
-			...prevState,
-			[inputName]: value,
-		}));
-	};
-
-	const handleSignIn = async () => {
-		try {
-			const { accessToken } = await loginUser(formState).unwrap();
-			Cookies.set('accessToken', accessToken);
-			navigate('/dashboard');
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	const { mutateAsync: signInUserMutation } = useMutation({
+		mutationFn: async (data: SignInFormValues) => {
+			try {
+				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(
+					`${import.meta.env.VITE_BACKEND_ADDRESS}/user/login`,
+					data
+				);
+				const accessToken = response.data.accessToken;
+				Cookies.set('accessToken', accessToken);
+				navigate('/dashboard');
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		onSuccess: () => {
+			enqueueSnackbar('Successfully signed in', { variant: 'success' });
+		},
+	});
 
 	const handleNavigateToSignUp = () => {
 		navigate('/signUp');
@@ -51,13 +68,6 @@ export const SignIn = () => {
 						<Typography variant="h5" className={classes.hasAccountText}>
 							Don't have an account?
 						</Typography>
-						<Button
-							variant="contained"
-							className={classes.hasAccountButton}
-							onClick={handleNavigateToSignUp}
-						>
-							Sign Up
-						</Button>
 					</div>
 					<Typography variant="h3" className={classes.title}>
 						Welcome to Gatherly!
@@ -66,42 +76,29 @@ export const SignIn = () => {
 						Login to your account
 					</Typography>
 
-					{/* <div className={classes.inputWrapper}> */}
-					<div className="my-10 grid gap-10">
-						{/* <Label htmlFor="email">Email</Label> */}
+					<form className="my-10 grid gap-10" onSubmit={handleSubmit((data) => signInUserMutation(data))}>
 						<div>
-							<Label htmlFor="email">Email</Label>
-							<Input type="email" id="email" placeholder="Email" />
+							<Label htmlFor="username">Username</Label>
+							<Input
+								{...register('username')}
+								type="text"
+								id="username"
+								placeholder="username"
+								errorMessage={errors.username?.message}
+							/>
 						</div>
 						<div>
 							<Label htmlFor="password">Password</Label>
-							<Input type="password" id="password" placeholder="" />
+							<Input
+								{...register('password')}
+								type="password"
+								id="password"
+								placeholder=""
+								errorMessage={errors.password?.message}
+							/>
 						</div>
-						{/* <Input<keyof LoginUserDTO>
-							label="Username"
-							isRequired
-							value={formState.username}
-							onChange={handleFormChange}
-							inputName="username"
-						/>
-						<Input<keyof LoginUserDTO>
-							label="Password"
-							type={EInputType.PASSWORD}
-							isRequired
-							value={formState.password}
-							inputName="password"
-							onChange={handleFormChange} */}
-						{/* /> */}
-					</div>
-					<Button
-						className={classes.SignUpButton}
-						variant="contained"
-						size="large"
-						onClick={handleSignIn}
-						disabled={isLoading}
-					>
-						Sign in
-					</Button>
+						<Button type="submit">Submit</Button>
+					</form>
 				</div>
 			</Card>
 		</div>
