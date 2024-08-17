@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { UserRoutes } from '@/services/api/userRoutes';
 import { LoginUserResponseDTO } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card, Typography } from '@mui/material';
@@ -39,10 +40,7 @@ export const SignIn = () => {
 	const { mutateAsync: signInUserMutation } = useMutation({
 		mutationFn: async (data: SignInFormValues) => {
 			try {
-				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(
-					`${import.meta.env.VITE_BACKEND_ADDRESS}/user/login`,
-					data
-				);
+				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(UserRoutes.login, data);
 				const accessToken = response.data.accessToken;
 				Cookies.set('accessToken', accessToken);
 				navigate('/dashboard');
@@ -60,21 +58,21 @@ export const SignIn = () => {
 	};
 
 	return (
-		<div className={classes.container}>
-			<Card className={classes.card}>
-				<div className={classes.image} />
-				<div className={classes.fieldsWrapper}>
-					<div className={classes.hasAccountWrapper}>
-						<Typography variant="h5" className={classes.hasAccountText}>
-							Don't have an account?
-						</Typography>
+		<div className="w-screen h-screen bg-emerald-50">
+			<Card className="w-[120rem] h-[60rem] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex">
+				<div className='bg-[url("/src/assets/home.jpg")] bg-center bg-[length:100%] bg-no-repeat basis-[60%]' />
+				<div className="p-8 flex-grow">
+					<div className="flex justify-end items-center">
+						<h5 className="mr-2 text-gray-500 text-xl">Don't have an account?</h5>
+						<Button
+							className="text-xl bg-emerald-500 p-6 hover:bg-emerald-500"
+							onClick={handleNavigateToSignUp}
+						>
+							Sign up
+						</Button>
 					</div>
-					<Typography variant="h3" className={classes.title}>
-						Welcome to Gatherly!
-					</Typography>
-					<Typography className={classes.subTitle} variant="h5">
-						Login to your account
-					</Typography>
+					<h3 className="font-bold mt-16 text-5xl">Welcome to Gatherly!</h3>
+					<h5 className="text-gray-500 mt-2 text-2xl">Login to your account</h5>
 
 					<form className="my-10 grid gap-10" onSubmit={handleSubmit((data) => signInUserMutation(data))}>
 						<div>
@@ -97,7 +95,9 @@ export const SignIn = () => {
 								errorMessage={errors.password?.message}
 							/>
 						</div>
-						<Button type="submit">Submit</Button>
+						<Button type="submit" className="text-2xl bg-emerald-500 p-8 hover:bg-emerald-500">
+							Submit
+						</Button>
 					</form>
 				</div>
 			</Card>
