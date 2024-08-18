@@ -2,7 +2,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useHandleError } from '@/hooks/useHandleError';
+import { useHandleFormError } from '@/hooks/useHandleError';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { LoginUserResponseDTO } from '@/types/user';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +25,7 @@ type SignInFormValues = z.infer<typeof signInFormSchema>;
 export const SignIn = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleError } = useHandleError();
+	const { handleFormError } = useHandleFormError();
 
 	const {
 		register,
@@ -45,7 +45,7 @@ export const SignIn = () => {
 				navigate(AppRoutes.toDashboard);
 				enqueueSnackbar('Successfully signed in', { variant: 'success' });
 			} catch (error) {
-				handleError(error, setError);
+				handleFormError(error, setError);
 			}
 		},
 	});
@@ -61,10 +61,7 @@ export const SignIn = () => {
 				<div className="p-8 flex-grow">
 					<div className="flex justify-end items-center">
 						<h5 className="mr-2 text-gray-500 text-xl">Don't have an account?</h5>
-						<Button
-							className="text-xl bg-emerald-500 p-6 hover:bg-emerald-500"
-							onClick={handleNavigateToSignUp}
-						>
+						<Button className="text-xl p-6" onClick={handleNavigateToSignUp}>
 							Sign up
 						</Button>
 					</div>
@@ -92,7 +89,7 @@ export const SignIn = () => {
 								errorMessage={errors.password?.message}
 							/>
 						</div>
-						<Button type="submit" className="text-2xl bg-emerald-500 p-8 hover:bg-emerald-500">
+						<Button type="submit" className="text-2xl p-8">
 							Log in
 						</Button>
 					</form>

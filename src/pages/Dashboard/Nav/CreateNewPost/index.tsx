@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -10,77 +10,95 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AddIcon from '@mui/icons-material/Add';
-import Modal from '@mui/material/Modal';
-import Typography from '@mui/material/Typography';
+import { Textarea } from '@/components/ui/textarea';
+import { useHandleFormError } from '@/hooks/useHandleError';
+import { appAxiosInstance } from '@/services/api/axios,';
+import { ApiPostRoutes } from '@/services/api/postRoutes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
+import { X } from 'lucide-react';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
-import { useCreatePostMutation } from '../../../../services/redux/reducers/post';
-import { CreatePostDTO } from '../../../../types/post';
-import { useStyles } from './styles';
-import { initialFormState } from './utils/initialFormState';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const createPostInFormSchema = z.object({
+	title: z.string(),
+	text: z.string(),
+});
+
+type CreatePostFormValues = z.infer<typeof createPostInFormSchema>;
 
 export const CreateNewPost = () => {
-	const { classes } = useStyles();
-	const [open, setOpen] = useState(false);
-	const [formState, setFormState] = useState<CreatePostDTO>(initialFormState);
-	const [createPost, { isLoading: isCreatingPost }] = useCreatePostMutation();
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const { handleFormError } = useHandleFormError();
 	const { enqueueSnackbar } = useSnackbar();
 
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => {
-		setOpen(false);
-		setFormState(initialFormState);
-	};
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors },
+	} = useForm<CreatePostFormValues>({
+		resolver: zodResolver(createPostInFormSchema),
+	});
 
-	const handleFormChange = (inputName: keyof CreatePostDTO, value: string) => {
-		setFormState((prevState) => ({
-			...prevState,
-			[inputName]: value,
-		}));
-	};
+	const { mutateAsync: createPostMutation } = useMutation({
+		mutationFn: async (data: CreatePostFormValues) => {
+			try {
+				await appAxiosInstance.post(ApiPostRoutes.createPost, data);
+				enqueueSnackbar('Post has been created', { variant: 'success' });
+			} catch (error) {
+				handleFormError(error, setError);
+			}
+		},
+	});
 
-	const handleCreatePost = async () => {
-		try {
-			await createPost(formState);
-			enqueueSnackbar('Post created successfully', { variant: 'success' });
-			handleClose();
-		} catch (error) {
-			console.log(error);
-			enqueueSnackbar('Error creating post', { variant: 'error' });
-		}
-	};
+	useEffect(() => {
+		setError('title', { message: '' });
+		setError('text', { message: '' });
+	}, [isDialogOpen]);
 
 	return (
 		<div>
-			<Dialog>
-				<DialogTrigger asChild>
-					<Button>Edit Profile</Button>
-				</DialogTrigger>
-				<DialogContent className="sm:max-w-[425px]">
+			<Dialog open={isDialogOpen}>
+				<Button className="text-xl p-6" onClick={() => setIsDialogOpen(true)}>
+					Create new post
+				</Button>
+				<DialogTrigger asChild></DialogTrigger>
+				<DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
 					<DialogHeader>
-						<DialogTitle>Edit profile</DialogTitle>
-						<DialogDescription>
-							Make changes to your profile here. Click save when you're done.
-						</DialogDescription>
+						<DialogTitle className="text-2xl">New post</DialogTitle>
 					</DialogHeader>
-					<div className="grid gap-4 py-4">
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="name" className="text-right">
-								Name
+					<DialogClose
+						onClick={() => setIsDialogOpen(false)}
+						className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
+					>
+						<X className="h-7 w-7" />
+						{/* <span className="sr-only">Close</span> */}
+					</DialogClose>
+					<form onSubmit={handleSubmit((data) => createPostMutation(data))}>
+						<div className="my-5">
+							<Label htmlFor="title" className="" isRequired>
+								Post Title
 							</Label>
-							<Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
+							<Input
+								{...register('title')}
+								id="title"
+								className=""
+								errorMessage={errors.title?.message}
+							/>
 						</div>
-						<div className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="username" className="text-right">
-								Username
+						<div className="my-10">
+							<Label htmlFor="text" className="">
+								Post Description
 							</Label>
-							<Input id="username" defaultValue="@peduarte" className="col-span-3" />
+							<Textarea {...register('text')} id="text" placeholder="Type your post description" />
 						</div>
-					</div>
-					<DialogFooter>
-						<Button type="submit">Save changes</Button>
-					</DialogFooter>
+						<DialogFooter>
+							<Button type="submit">Save changes</Button>
+						</DialogFooter>
+					</form>
 				</DialogContent>
 			</Dialog>
 		</div>
