@@ -12,10 +12,6 @@ export const Nav = () => {
 				<CreateNewPost />
 				<UserAvatar />
 			</div>
-			{/* <Avatar /> */}
-			{/* <IconButton>
-				<LogoutIcon className={classes.logoutIcon} />
-			</IconButton> */}
 		</div>
 	);
 };

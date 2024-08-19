@@ -12,3 +12,8 @@ export interface LoginUserDTO {
 export interface LoginUserResponseDTO {
 	accessToken: string;
 }
+
+export interface UserDTO {
+	id: number;
+	username: string;
+}

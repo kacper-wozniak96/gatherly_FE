@@ -15,7 +15,7 @@ import { useHandleFormError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const createPostInFormSchema = z.object({
-	title: z.string(),
+	title: z.string().min(3),
 	text: z.string(),
 });
 
@@ -33,11 +33,13 @@ export const CreateNewPost = () => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const { handleFormError } = useHandleFormError();
 	const { enqueueSnackbar } = useSnackbar();
+	const queryClient = useQueryClient();
 
 	const {
 		register,
 		handleSubmit,
 		setError,
+		reset,
 		formState: { errors },
 	} = useForm<CreatePostFormValues>({
 		resolver: zodResolver(createPostInFormSchema),
@@ -48,21 +50,32 @@ export const CreateNewPost = () => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.createPost, data);
 				enqueueSnackbar('Post has been created', { variant: 'success' });
+				closeDialog();
 			} catch (error) {
 				handleFormError(error, setError);
 			}
 		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['posts'] });
+		},
 	});
 
 	useEffect(() => {
-		setError('title', { message: '' });
-		setError('text', { message: '' });
+		reset();
 	}, [isDialogOpen]);
+
+	const openDialog = () => {
+		setIsDialogOpen(true);
+	};
+
+	const closeDialog = () => {
+		setIsDialogOpen(false);
+	};
 
 	return (
 		<div>
 			<Dialog open={isDialogOpen}>
-				<Button className="text-xl p-6" onClick={() => setIsDialogOpen(true)}>
+				<Button className="text-xl p-6" onClick={openDialog}>
 					Create new post
 				</Button>
 				<DialogTrigger asChild></DialogTrigger>
@@ -71,7 +84,7 @@ export const CreateNewPost = () => {
 						<DialogTitle className="text-2xl">New post</DialogTitle>
 					</DialogHeader>
 					<DialogClose
-						onClick={() => setIsDialogOpen(false)}
+						onClick={closeDialog}
 						className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
 					>
 						<X className="h-7 w-7" />
