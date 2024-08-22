@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { useHandleFormError } from '@/hooks/useHandleError';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { LoginUserResponseDTO } from '@/types/user';
+import { accessTokenKey, userIdKey } from '@/utils/accessToken';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
@@ -41,7 +42,9 @@ export const SignIn = () => {
 			try {
 				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(ApiUserRoutes.login, data);
 				const accessToken = response.data.accessToken;
-				Cookies.set('accessToken', accessToken);
+				const userId = response.data.user.id;
+				Cookies.set(accessTokenKey, accessToken);
+				localStorage.setItem(userIdKey, String(userId));
 				navigate(AppRoutes.toDashboard);
 				enqueueSnackbar('Successfully signed in', { variant: 'success' });
 			} catch (error) {

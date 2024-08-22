@@ -3,7 +3,8 @@ export class AppRoutes {
 	static toSignUp = '/signUp';
 	static toSignIn = '/signIn';
 	static toPost = `/post/:id`;
-	static toProfile = `/profile`;
+	static toChangeUserInformation = `/profile`;
+	static toChangePassword = `/changePassword`;
 	static wildCard = '*';
 
 	static redirectToPost(id: number) {

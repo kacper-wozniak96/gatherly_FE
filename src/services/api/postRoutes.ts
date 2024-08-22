@@ -5,4 +5,6 @@ export class ApiPostRoutes {
 	static upVotePost = (postId: number) => `/post/${postId}/upvote`;
 	static downVotePost = (postId: number) => `/post/${postId}/downvote`;
 	static createComment = `/comment`;
+	static getUser = (userId: number) => `/user/${userId}`;
+	static updateUser = (userId: number) => `/user/${userId}`;
 }

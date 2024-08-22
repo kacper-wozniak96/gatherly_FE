@@ -1,18 +1,13 @@
 import { Separator } from '@/components/ui/separator';
-import { Divider } from '@mui/material';
 import { Nav } from './Nav';
 import { PostsList } from './PostsList';
-import { useStyles } from './styles';
 
 export const Dashboard = () => {
-	const { classes } = useStyles();
-
 	return (
-		<div className={classes.container}>
-			<div className={classes.innerContainer}>
+		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
+			<div className="w-[60rem]">
 				<Nav />
-				<Separator />
-				{/* <Divider /> */}
+				<Separator className="bg-slate-300" />
 				<PostsList />
 			</div>
 		</div>
