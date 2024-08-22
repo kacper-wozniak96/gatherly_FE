@@ -1,5 +1,5 @@
 import { CreateNewPost } from './CreateNewPost';
-import { UserAvatar } from './UserAvatar';
+import { Menu } from './Menu';
 import { useStyles } from './styles';
 
 export const Nav = () => {
@@ -10,7 +10,7 @@ export const Nav = () => {
 			<div />
 			<div className={classes.rightInnerWrapper}>
 				<CreateNewPost />
-				<UserAvatar />
+				<Menu />
 			</div>
 		</div>
 	);

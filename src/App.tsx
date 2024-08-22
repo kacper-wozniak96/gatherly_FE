@@ -1,22 +1,25 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { AppRoutes } from './components/routes/AppRoutes';
 import { PrivateRoutes } from './components/routes/PrivateRoutes';
-import { SignUp } from './pages/SignUp';
-import { SignIn } from './pages/SignIn';
 import { Dashboard } from './pages/Dashboard';
+import { Post } from './pages/Post';
+import { Profile } from './pages/Profile';
+import { SignIn } from './pages/SignIn';
+import { SignUp } from './pages/SignUp';
 
 export function App() {
-	console.log('siema');
-
 	return (
 		<Router>
 			<Routes>
 				<Route element={<PrivateRoutes />}>
-					<Route path="/dashboard" element={<Dashboard />} />
-					<Route path="*" element={<Navigate to={'/dashboard'} />} />
+					<Route path={AppRoutes.toDashboard} element={<Dashboard />} />
+					<Route path={AppRoutes.toPost} element={<Post />} />
+					<Route path={AppRoutes.toProfile} element={<Profile />} />
+					<Route path={AppRoutes.wildCard} element={<Navigate to={AppRoutes.toDashboard} />} />
 				</Route>
-				<Route path="/signIn" element={<SignIn />} />
-				<Route path="/signup" element={<SignUp />} />
-				<Route path="*" element={<Navigate to={'/signIn'} />} />
+				<Route path={AppRoutes.toSignIn} element={<SignIn />} />
+				<Route path={AppRoutes.toSignUp} element={<SignUp />} />
+				<Route path={AppRoutes.wildCard} element={<Navigate to={AppRoutes.toSignIn} />} />
 			</Routes>
 		</Router>
 	);

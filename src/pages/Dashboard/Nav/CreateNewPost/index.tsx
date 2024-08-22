@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useHandleFormError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
+import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { X } from 'lucide-react';
@@ -56,7 +57,7 @@ export const CreateNewPost = () => {
 			}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['posts'] });
+			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
 		},
 	});
 
