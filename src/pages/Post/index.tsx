@@ -1,26 +1,20 @@
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
-import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { useParams } from 'react-router-dom';
-import { SinglePost } from '../Dashboard/PostsList/Post';
+import { useNavigate, useNavigation, useParams } from 'react-router-dom';
 
 import { AppRoutes } from '@/components/routes/AppRoutes';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import { FaComment, FaRegComment, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FaArrowLeft } from 'react-icons/fa';
 import { Comments } from './Comments';
 import { NewComment } from './NewComment';
-import { CustomPagination } from './Pagination';
 import { PostDetails } from './PostDetails';
 
 export const Post = () => {
 	const { id } = useParams<{ id: string }>();
+	const navigate = useNavigate();
 
 	const {
 		isPending,
@@ -45,6 +39,7 @@ export const Post = () => {
 	return (
 		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
 			<div className="w-[60rem]">
+				<FaArrowLeft className="my-5 text-3xl cursor-pointer" onClick={() => navigate(AppRoutes.toDashboard)} />
 				<PostDetails post={post} />
 				<Card>
 					<CardHeader>

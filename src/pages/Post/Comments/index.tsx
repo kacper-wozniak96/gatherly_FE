@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CustomPagination } from '../Pagination';
+import { CustomPagination } from '../../../components/CustomPagination';
 
 export interface GetCommentsResponseDTO {
 	comments: CommentDTO[];
@@ -25,7 +25,7 @@ export const Comments = () => {
 	const offset = useMemo(() => (selectedPage - 1) * 5, [selectedPage]);
 
 	const { isPending, isError, data, error, isLoading } = useQuery({
-		queryKey: [ReactQueryKeys.fetchComments, id, selectedPage],
+		queryKey: [ReactQueryKeys.fetchComments, id, offset],
 		queryFn: async () => {
 			const response: AxiosResponse<GetCommentsResponseDTO> = await appAxiosInstance.get(
 				ApiPostRoutes.getComments(Number(id), offset)
@@ -56,7 +56,7 @@ export const Comments = () => {
 						</Avatar>
 						<span className="font-light">{comment.user.username}</span>
 					</div>
-					<span>{comment.text}</span>
+					<span className="break-all">{comment.text}</span>
 					<Separator />
 				</div>
 			))}

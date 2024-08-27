@@ -30,7 +30,6 @@ const formSchema = z.object({
 			(files) => files.length === 0 || ['image/jpeg', 'image/png'].includes((files as FileList)[0]?.type),
 			'Only JPEG and PNG files are allowed'
 		),
-	// avatar: z.any().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -50,7 +49,7 @@ export const ChangeUserInformation = () => {
 		error,
 		isLoading,
 	} = useQuery({
-		queryKey: ReactQueryKeys.fetchUser,
+		queryKey: [ReactQueryKeys.fetchUser],
 		queryFn: async () => {
 			const storedUserId = localStorage.getItem(userIdKey);
 			const response: AxiosResponse<UserDTO> = await appAxiosInstance.get(

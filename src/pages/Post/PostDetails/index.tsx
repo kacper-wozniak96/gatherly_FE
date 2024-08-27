@@ -26,8 +26,8 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 			} catch (error) {}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPost });
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 
@@ -38,8 +38,8 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 			} catch (error) {}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPost });
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 

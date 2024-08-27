@@ -57,7 +57,7 @@ export const CreateNewPost = () => {
 			}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 

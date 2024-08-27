@@ -6,7 +6,6 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from '@/components/ui/pagination';
-import { useEffect, useState } from 'react';
 
 interface Props {
 	listCount: number;
@@ -16,16 +15,12 @@ interface Props {
 }
 
 export function CustomPagination({ listCount, offset, handlePageChange, selectedPage }: Props) {
-	// const [selectedPage, setSelectedPage] = useState(1);
-
 	const numberOfPages = Math.ceil(listCount / offset);
 
 	const isLastPage = selectedPage === numberOfPages;
 	const isFirstPage = selectedPage === 1;
 
-	// useEffect(() => {
-	// 	handlePageChange(selectedPage);
-	// }, [selectedPage]);
+	if (numberOfPages === 1 || !listCount) return null;
 
 	return (
 		<Pagination>

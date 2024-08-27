@@ -26,7 +26,7 @@ export const SinglePost = (props: PostProps) => {
 			} catch (error) {}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 
@@ -37,7 +37,7 @@ export const SinglePost = (props: PostProps) => {
 			} catch (error) {}
 		},
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ReactQueryKeys.fetchPosts });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 

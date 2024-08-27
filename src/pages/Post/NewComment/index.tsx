@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useHandleFormError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -16,7 +17,7 @@ interface NewCommentProps {
 }
 
 const createCommentFormSchema = z.object({
-	comment: z.string().min(1),
+	comment: z.string().trim().min(1).max(5),
 });
 
 type CreateCommentFormValues = z.infer<typeof createCommentFormSchema>;
@@ -26,11 +27,10 @@ interface CreateCommentRequestDTO {
 	comment: string;
 }
 
-// queryKey: [...ReactQueryKeys.fetchPost, id],
-
 export const NewComment = ({ post }: NewCommentProps) => {
 	const queryClient = useQueryClient();
 	const { enqueueSnackbar } = useSnackbar();
+	const { handleFormError } = useHandleFormError();
 
 	const {
 		register,
@@ -50,7 +50,9 @@ export const NewComment = ({ post }: NewCommentProps) => {
 					comment: data.comment,
 				};
 				await appAxiosInstance.post(ApiPostRoutes.createComment, requestData);
-			} catch (error) {}
+			} catch (error) {
+				handleFormError(error, setError);
+			}
 		},
 		onSuccess: () => {
 			reset();
@@ -61,7 +63,13 @@ export const NewComment = ({ post }: NewCommentProps) => {
 
 	return (
 		<form className="flex w-full items-center space-x-2" onSubmit={handleSubmit((data) => createComment(data))}>
-			<Input {...register('comment')} type="text" placeholder="Your Comment ..." className="grow" />
+			<Input
+				{...register('comment')}
+				type="text"
+				placeholder="Your Comment ..."
+				className="grow"
+				errorMessage={errors.comment?.message}
+			/>
 			<Button type="submit" className="text-xl">
 				Add
 			</Button>
