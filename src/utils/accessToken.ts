@@ -1,2 +1,2 @@
 export const accessTokenKey = 'accessToken';
-export const userIdKey = 'user';
+export const localStorageUserIdKey = 'user';

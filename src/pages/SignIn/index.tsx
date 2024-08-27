@@ -3,13 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useHandleFormError } from '@/hooks/useHandleError';
+import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { LoginUserResponseDTO } from '@/types/user';
-import { accessTokenKey, userIdKey } from '@/utils/accessToken';
+import { accessTokenKey, localStorageUserIdKey } from '@/utils/accessToken';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import axios, { AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
@@ -40,11 +41,14 @@ export const SignIn = () => {
 	const { mutateAsync: signInUserMutation } = useMutation({
 		mutationFn: async (data: SignInFormValues) => {
 			try {
-				const response: AxiosResponse<LoginUserResponseDTO> = await axios.post(ApiUserRoutes.login, data);
+				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(
+					ApiUserRoutes.login,
+					data
+				);
 				const accessToken = response.data.accessToken;
 				const userId = response.data.user.id;
 				Cookies.set(accessTokenKey, accessToken);
-				localStorage.setItem(userIdKey, String(userId));
+				localStorage.setItem(localStorageUserIdKey, String(userId));
 				navigate(AppRoutes.toDashboard);
 				enqueueSnackbar('Successfully signed in', { variant: 'success' });
 			} catch (error) {

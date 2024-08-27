@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CommentDTO } from '@/types/post';
 import { UserDTO } from '@/types/user';
+import { localStorageUserIdKey } from '@/utils/accessToken';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
 import { Separator } from '@radix-ui/react-separator';
 import { DeleteButton } from './DeleteButton';
@@ -10,6 +11,18 @@ interface Props {
 }
 
 export const Comment = ({ comment }: Props) => {
+	const storedUserId = localStorage.getItem(localStorageUserIdKey);
+
+	console.log({ storedUserId, comment });
+
+	const isCommentCreatedByCurrentLoggedInUser = Number(storedUserId) === comment.user.id;
+
+	console.log({ isCommentCreatedByCurrentLoggedInUser });
+
+	// if (comment.user.id !== Number(storedUserId)) {
+	// 	return null;
+	// }
+
 	return (
 		<div className="my-5 relative group hover:bg-gray-50 rounded-xl px-3 py-1">
 			<div className="flex items-center my-1">
@@ -23,7 +36,7 @@ export const Comment = ({ comment }: Props) => {
 			</div>
 			<span className="break-all">{comment.text}</span>
 			<Separator />
-			<DeleteButton comment={comment} />
+			{isCommentCreatedByCurrentLoggedInUser && <DeleteButton comment={comment} />}
 		</div>
 	);
 };

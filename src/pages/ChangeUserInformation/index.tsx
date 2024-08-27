@@ -8,7 +8,7 @@ import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { UserDTO } from '@/types/user';
-import { userIdKey } from '@/utils/accessToken';
+import { localStorageUserIdKey } from '@/utils/accessToken';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -51,7 +51,7 @@ export const ChangeUserInformation = () => {
 	} = useQuery({
 		queryKey: [ReactQueryKeys.fetchUser],
 		queryFn: async () => {
-			const storedUserId = localStorage.getItem(userIdKey);
+			const storedUserId = localStorage.getItem(localStorageUserIdKey);
 			const response: AxiosResponse<UserDTO> = await appAxiosInstance.get(
 				ApiPostRoutes.getUser(Number(storedUserId))
 			);
@@ -86,7 +86,7 @@ export const ChangeUserInformation = () => {
 				if (touchedFields?.avatar) formData.append('file', data?.avatar[0]);
 				if (touchedFields?.username) formData.append('username', data?.username);
 
-				const storedUserId = Number(localStorage.getItem(userIdKey));
+				const storedUserId = Number(localStorage.getItem(localStorageUserIdKey));
 				if (!Number.isInteger(storedUserId)) return;
 				await appAxiosInstance.post(ApiPostRoutes.updateUser(storedUserId), formData);
 				navigate(AppRoutes.toDashboard);

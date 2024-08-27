@@ -9,4 +9,5 @@ export class ApiPostRoutes {
 	static updateUser = (userId: number) => `/user/${userId}`;
 	static getComments = (postId: number, offset: number) => `/post/${postId}/comments?offset=${offset}`;
 	static deleteComment = (postId: number, commentId: number) => `/post/${postId}/comment/${commentId}`;
+	static deletePost = (postId: number) => `/post/${postId}`;
 }
