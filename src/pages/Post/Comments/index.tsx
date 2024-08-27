@@ -1,5 +1,18 @@
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -10,8 +23,10 @@ import { Separator } from '@radix-ui/react-separator';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useMemo, useState } from 'react';
+import { MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { CustomPagination } from '../../../components/CustomPagination';
+import { Comment } from './Comment';
 
 export interface GetCommentsResponseDTO {
 	comments: CommentDTO[];
@@ -45,21 +60,7 @@ export const Comments = () => {
 
 	return (
 		<div>
-			{data?.comments?.map((comment) => (
-				<div className="my-8">
-					<div className="flex items-center my-1">
-						<Avatar className="w-8 h-8 mr-2">
-							<AvatarImage src={comment?.user?.avatarSignedURL ?? ''} alt="@shadcn" />
-							<AvatarFallback className="text-xl">
-								{getFirstLetterOfUsername(comment?.user as UserDTO)}
-							</AvatarFallback>
-						</Avatar>
-						<span className="font-light">{comment.user.username}</span>
-					</div>
-					<span className="break-all">{comment.text}</span>
-					<Separator />
-				</div>
-			))}
+			{data?.comments?.map((comment) => <Comment comment={comment} />)}
 			<CustomPagination
 				listCount={data.commentsTotalCount}
 				offset={5}
