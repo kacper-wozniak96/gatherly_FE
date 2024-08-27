@@ -26,6 +26,8 @@ interface CreateCommentRequestDTO {
 	comment: string;
 }
 
+// queryKey: [...ReactQueryKeys.fetchPost, id],
+
 export const NewComment = ({ post }: NewCommentProps) => {
 	const queryClient = useQueryClient();
 	const { enqueueSnackbar } = useSnackbar();
@@ -53,6 +55,7 @@ export const NewComment = ({ post }: NewCommentProps) => {
 		onSuccess: () => {
 			reset();
 			enqueueSnackbar('Comment added', { variant: 'success' });
+			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchComments] });
 		},
 	});
 

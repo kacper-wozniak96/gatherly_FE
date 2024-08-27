@@ -14,8 +14,9 @@ import { Separator } from '@/components/ui/separator';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { FaComment, FaRegComment, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { Comments } from './Comments';
 import { NewComment } from './NewComment';
-import { PostComments } from './PostComments';
+import { CustomPagination } from './Pagination';
 import { PostDetails } from './PostDetails';
 
 export const Post = () => {
@@ -28,7 +29,7 @@ export const Post = () => {
 		error,
 		isLoading,
 	} = useQuery({
-		queryKey: [...ReactQueryKeys.fetchPost, id],
+		queryKey: ['fetchPost'],
 		queryFn: async () => {
 			const response: AxiosResponse<PostDTO> = await appAxiosInstance.get(ApiPostRoutes.getPost(Number(id)));
 			const post = response.data;
@@ -51,7 +52,7 @@ export const Post = () => {
 					</CardHeader>
 					<CardContent>
 						<NewComment post={post} />
-						<PostComments />
+						<Comments />
 					</CardContent>
 				</Card>
 			</div>

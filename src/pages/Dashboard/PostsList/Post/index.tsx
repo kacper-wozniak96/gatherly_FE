@@ -8,7 +8,7 @@ import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { PostDTO } from '@/types/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { FaComment, FaRegComment, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { FaRegComment, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 
 export interface PostProps {
 	post: PostDTO;
@@ -68,7 +68,7 @@ export const SinglePost = (props: PostProps) => {
 				<Separator orientation="vertical" className="self-stretch h-1/2 mx-2" />
 				<div className="flex items-center">
 					<FaRegComment />
-					<span className="ml-2">{post.postCommentTotalNumber}</span>
+					<span className="ml-2">{post.postCommentsTotalNumber}</span>
 				</div>
 			</CardFooter>
 		</Card>

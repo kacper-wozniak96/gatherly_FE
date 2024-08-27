@@ -14,7 +14,13 @@ export interface LoginUserResponseDTO {
 	user: UserDTO;
 }
 
+// export interface UserDTO {
+// 	id: number;
+// 	username: string;
+// }
+
 export interface UserDTO {
 	id: number;
 	username: string;
+	avatarSignedURL?: string;
 }

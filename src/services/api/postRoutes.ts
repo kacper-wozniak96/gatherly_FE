@@ -7,4 +7,5 @@ export class ApiPostRoutes {
 	static createComment = `/comment`;
 	static getUser = (userId: number) => `/user/${userId}`;
 	static updateUser = (userId: number) => `/user/${userId}`;
+	static getComments = (postId: number, offset: number) => `/post/${postId}/comments?offset=${offset}`;
 }
