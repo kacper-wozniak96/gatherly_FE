@@ -7,15 +7,19 @@ import { useNavigate, useNavigation, useParams } from 'react-router-dom';
 
 import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { localStorageUserIdKey } from '@/utils/accessToken';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Comments } from './Comments';
 import { DeletePost } from './DeletePost';
+import { EditPost } from './EditPost';
 import { NewComment } from './NewComment';
 import { PostDetails } from './PostDetails';
 
 export const Post = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
+
+	const storedUserId = localStorage.getItem(localStorageUserIdKey);
 
 	const {
 		isPending,
@@ -37,6 +41,8 @@ export const Post = () => {
 		return <div>Loading...</div>;
 	}
 
+	const isPostCreatedByCurrentLoggedInUser = Number(storedUserId) === post.user.id;
+
 	return (
 		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
 			<div className="w-[60rem]">
@@ -45,7 +51,10 @@ export const Post = () => {
 						className="my-5 text-3xl cursor-pointer"
 						onClick={() => navigate(AppRoutes.toDashboard)}
 					/>
-					<DeletePost post={post} />
+					<div className="flex items-center">
+						<EditPost />
+						{isPostCreatedByCurrentLoggedInUser && <DeletePost post={post} />}
+					</div>
 				</div>
 				<PostDetails post={post} />
 				<Card>
