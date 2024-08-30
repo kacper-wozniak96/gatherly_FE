@@ -29,8 +29,6 @@ export const Dashboard = () => {
 	const { isLoading, data } = useQuery({
 		queryKey: [ReactQueryKeys.fetchPosts, offset, search],
 		queryFn: async (query) => {
-			console.log({ query });
-
 			const response: AxiosResponse<GetPostsResponseDTO> = await appAxiosInstance.get(
 				ApiPostRoutes.getPosts(offset, search)
 			);

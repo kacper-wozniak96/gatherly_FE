@@ -2,6 +2,7 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaSearch } from 'react-icons/fa';
 import { z } from 'zod';
 import { DashboardContext } from '../..';
 
@@ -28,8 +29,11 @@ export const SearchPost = () => {
 	};
 
 	return (
-		<form className="basis-1/2" onSubmit={handleSubmit((data) => onSubmit(data))}>
-			<Input {...register('search')} placeholder="Search post" />
-		</form>
+		<div className="basis-1/2 flex items-center">
+			<FaSearch className="bg-amber-500 text-white h-11 w-11 p-2 rounded-md mr-2 text-xl" />
+			<form className='grow' onSubmit={handleSubmit((data) => onSubmit(data))}>
+				<Input {...register('search')} placeholder="Search post" />
+			</form>
+		</div>
 	);
 };

@@ -50,7 +50,7 @@ export const SinglePost = (props: PostProps) => {
 				<span className="my-0">{format(post.createdAt, 'dd-MM-yyyy')}</span>
 			</CardHeader>
 			<CardContent>
-				<CardDescription>{post.text}</CardDescription>
+				<CardDescription className="italic">{post.text || 'No post description'}</CardDescription>
 			</CardContent>
 			<CardFooter className="flex items-center">
 				<Button variant={post.isDownVotedByUser ? 'destructive' : 'outline'} onClick={() => downVotePost()}>

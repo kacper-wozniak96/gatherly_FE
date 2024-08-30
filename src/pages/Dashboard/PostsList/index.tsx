@@ -2,7 +2,9 @@ import { CustomPagination } from '@/components/CustomPagination';
 import { PostDTO } from '@/types/post';
 import { useContext } from 'react';
 import { DashboardContext } from '..';
+import { NoPosts } from './NoPosts';
 import { SinglePost } from './Post';
+import { PostsListSkeleton } from './PostsListSkeleton';
 
 export interface GetPostsResponseDTO {
 	posts: PostDTO[];
@@ -12,10 +14,13 @@ export interface GetPostsResponseDTO {
 export const PostsList = () => {
 	const { posts, handlePageChange, isLoading, selectedPage, postsTotalCount } = useContext(DashboardContext);
 
-	if (isLoading || !posts || !postsTotalCount) {
-		return <div>Loading...</div>;
+	if (isLoading) {
+		return <PostsListSkeleton />;
 	}
 
+	if (!posts || !postsTotalCount) {
+		return <NoPosts />;
+	}
 	return (
 		<>
 			<div>

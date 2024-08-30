@@ -6,6 +6,7 @@ import {
 	PaginationNext,
 	PaginationPrevious,
 } from '@/components/ui/pagination';
+import { useMemo } from 'react';
 
 interface Props {
 	listCount: number;
@@ -14,22 +15,22 @@ interface Props {
 	selectedPage: number;
 }
 
-export function CustomPagination({ listCount, offset, handlePageChange, selectedPage }: Props) {
+export const CustomPagination = ({ listCount, offset, handlePageChange, selectedPage }: Props) => {
 	const numberOfPages = Math.ceil(listCount / offset);
 
-	const isLastPage = selectedPage === numberOfPages;
-	const isFirstPage = selectedPage === 1;
-
-	if (numberOfPages === 1 || !listCount) return null;
+	const isLastPage = useMemo(() => selectedPage === numberOfPages, [selectedPage, numberOfPages]);
+	const isFirstPage = useMemo(() => selectedPage === 1, [selectedPage]);
 
 	return (
 		<Pagination>
 			<PaginationContent>
-				{!isFirstPage && (
-					<PaginationItem onClick={() => handlePageChange(selectedPage - 1)}>
-						<PaginationPrevious href="#" />
-					</PaginationItem>
-				)}
+				<PaginationItem
+					onClick={() => handlePageChange(selectedPage - 1)}
+					className={`${isFirstPage ? 'pointer-events-none opacity-50' : ''}`}
+				>
+					<PaginationPrevious href="#" />
+				</PaginationItem>
+
 				{Array.apply(null, Array(numberOfPages)).map((x, i) => {
 					const pageNumber = i + 1;
 
@@ -49,12 +50,14 @@ export function CustomPagination({ listCount, offset, handlePageChange, selected
 						</PaginationItem>
 					);
 				})}
-				{!isLastPage && (
-					<PaginationItem onClick={() => handlePageChange(selectedPage + 1)}>
-						<PaginationNext href="#" />
-					</PaginationItem>
-				)}
+
+				<PaginationItem
+					onClick={() => handlePageChange(selectedPage + 1)}
+					className={`${isLastPage ? 'pointer-events-none opacity-50' : ''}`}
+				>
+					<PaginationNext href="#" />
+				</PaginationItem>
 			</PaginationContent>
 		</Pagination>
 	);
-}
+};
