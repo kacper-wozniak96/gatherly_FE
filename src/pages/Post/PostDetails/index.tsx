@@ -49,7 +49,7 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 				<CardTitle>{post?.title}</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<CardDescription>{post?.text}</CardDescription>
+				<CardDescription className="italic">{post?.text || 'No post description'}</CardDescription>
 			</CardContent>
 			<CardFooter className="flex items-center justify-between">
 				<div>

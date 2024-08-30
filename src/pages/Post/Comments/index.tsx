@@ -27,6 +27,8 @@ import { MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { CustomPagination } from '../../../components/CustomPagination';
 import { Comment } from './Comment';
+import { CommentsListSkeleton } from './CommentsListSkeleton';
+import { NoComments } from './NoComments';
 
 export interface GetCommentsResponseDTO {
 	comments: CommentDTO[];
@@ -54,8 +56,12 @@ export const Comments = () => {
 		setSelectedPage(page);
 	};
 
-	if (isLoading || !data) {
-		return <div>Loading...</div>;
+	if (isLoading) {
+		return <CommentsListSkeleton />;
+	}
+
+	if (!data?.comments || !data?.commentsTotalCount) {
+		return <NoComments />;
 	}
 
 	return (

@@ -13,15 +13,7 @@ interface Props {
 export const Comment = ({ comment }: Props) => {
 	const storedUserId = localStorage.getItem(localStorageUserIdKey);
 
-	console.log({ storedUserId, comment });
-
 	const isCommentCreatedByCurrentLoggedInUser = Number(storedUserId) === comment.user.id;
-
-	console.log({ isCommentCreatedByCurrentLoggedInUser });
-
-	// if (comment.user.id !== Number(storedUserId)) {
-	// 	return null;
-	// }
 
 	return (
 		<div className="my-5 relative group hover:bg-gray-50 rounded-xl px-3 py-1">
