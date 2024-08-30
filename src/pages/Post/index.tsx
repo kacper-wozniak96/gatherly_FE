@@ -52,7 +52,7 @@ export const Post = () => {
 						onClick={() => navigate(AppRoutes.toDashboard)}
 					/>
 					<div className="flex items-center">
-						<EditPost />
+						{isPostCreatedByCurrentLoggedInUser && <EditPost />}
 						{isPostCreatedByCurrentLoggedInUser && <DeletePost post={post} />}
 					</div>
 				</div>

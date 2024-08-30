@@ -1,103 +1,111 @@
-import { Button, Card, Typography } from '@mui/material';
-import { useState } from 'react';
-import { EInputType, Input } from '../../components/Input';
-import { useCreateUserMutation } from '../../services/redux/reducers/user';
-import { CreateUserDTO } from '../../types/user';
-import { useStyles } from './styles';
-import { initialFormState } from './utils/initialFormState';
-import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from '@/components/routes/AppRoutes';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useHandleFormError } from '@/hooks/useHandleError';
+import { appAxiosInstance } from '@/services/api/axios,';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Card } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+
+const signUpFormSchema = z.object({
+	username: z
+		.string({
+			required_error: 'Username is required',
+			invalid_type_error: 'Username must be a string',
+		})
+		.min(3, { message: 'Username must be at least 3 characters long' })
+		.max(30, { message: 'Username must be at most 30 characters long' }),
+	password: z.string(),
+	confirmPassword: z.string(),
+});
+
+type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 
 export const SignUp = () => {
-	const { classes } = useStyles();
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
+	const { handleFormError } = useHandleFormError();
 
-	const [formState, setFormState] = useState<CreateUserDTO>(initialFormState);
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors },
+	} = useForm<SignUpFormValues>({
+		resolver: zodResolver(signUpFormSchema),
+	});
 
-	const [createUser, { isLoading }] = useCreateUserMutation();
-
-	const handleFormChange = (inputName: keyof CreateUserDTO, value: string) => {
-		setFormState((prevState) => ({
-			...prevState,
-			[inputName]: value,
-		}));
-	};
-
-	const handleSignUp = async () => {
-		try {
-			await createUser(formState);
-			enqueueSnackbar('Account has been created', {
-				variant: 'success',
-			});
-			handleNavigateToSignIn();
-		} catch (error) {
-			console.log(error);
-		}
-	};
+	const { mutateAsync: signUpUserMutation } = useMutation({
+		mutationFn: async (data: SignUpFormValues) => {
+			try {
+				await appAxiosInstance.post(ApiUserRoutes.createUser, data);
+				enqueueSnackbar('Account has been created', { variant: 'success' });
+				navigate(AppRoutes.toSignIn);
+			} catch (error) {
+				handleFormError(error, setError);
+			}
+		},
+	});
 
 	const handleNavigateToSignIn = () => {
-		navigate('/signIn');
+		navigate(AppRoutes.toSignIn);
 	};
 
 	return (
-		<div className={classes.container}>
-			<Card className={classes.card}>
-				<div className={classes.image} />
-				<div className={classes.fieldsWrapper}>
-					<div className={classes.hasAccountWrapper}>
-						<Typography variant="h5" className={classes.hasAccountText}>
-							Already have an account?
-						</Typography>
-						<Button
-							variant="contained"
-							className={classes.hasAccountButton}
-							onClick={handleNavigateToSignIn}
-						>
-							Sign In
+		<div className="w-screen h-screen bg-emerald-50">
+			<Card className="w-[120rem] h-[60rem] fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex">
+				<div className='bg-[url("/src/assets/home.jpg")] bg-center bg-[length:100%] bg-no-repeat basis-[60%]' />
+				<div className="p-8 flex-grow">
+					<div className="flex justify-end items-center">
+						<h5 className="mr-2 text-gray-500 text-xl">Already have an account?</h5>
+						<Button className="text-xl p-6" onClick={handleNavigateToSignIn}>
+							Sign in
 						</Button>
 					</div>
-					<Typography variant="h3" className={classes.title}>
-						Welcome to Gatherly!
-					</Typography>
-					<Typography className={classes.subTitle} variant="h5">
-						Register your account
-					</Typography>
+					<h3 className="font-bold mt-16 text-5xl">Join Gatherly!</h3>
+					<h5 className="text-gray-500 mt-2 text-2xl">Create your account</h5>
 
-					<div className={classes.inputWrapper}>
-						<Input<keyof CreateUserDTO>
-							label="Username"
-							isRequired
-							value={formState.userName}
-							onChange={handleFormChange}
-							inputName="userName"
-						/>
-						<Input<keyof CreateUserDTO>
-							label="Password"
-							type={EInputType.PASSWORD}
-							isRequired
-							value={formState.password}
-							inputName="password"
-							onChange={handleFormChange}
-						/>
-						<Input<keyof CreateUserDTO>
-							label="Confirm password"
-							type={EInputType.PASSWORD}
-							isRequired
-							value={formState.confirmPassword}
-							inputName="confirmPassword"
-							onChange={handleFormChange}
-						/>
-					</div>
-					<Button
-						className={classes.SignUpButton}
-						variant="contained"
-						size="large"
-						onClick={handleSignUp}
-						disabled={isLoading}
-					>
-						Sign up
-					</Button>
+					<form className="my-10 grid gap-10" onSubmit={handleSubmit((data) => signUpUserMutation(data))}>
+						<div>
+							<Label htmlFor="username">Username</Label>
+							<Input
+								{...register('username')}
+								type="text"
+								id="username"
+								placeholder=""
+								errorMessage={errors.username?.message}
+							/>
+						</div>
+						<div>
+							<Label htmlFor="password">Password</Label>
+							<Input
+								{...register('password')}
+								type="password"
+								id="password"
+								placeholder=""
+								errorMessage={errors.password?.message}
+							/>
+						</div>
+						<div>
+							<Label htmlFor="confirmPassword">Confirm Password</Label>
+							<Input
+								{...register('confirmPassword')}
+								type="password"
+								id="confirmPassword"
+								placeholder=""
+								errorMessage={errors.confirmPassword?.message}
+							/>
+						</div>
+						<Button type="submit" className="text-2xl p-8">
+							Sign up
+						</Button>
+					</form>
 				</div>
 			</Card>
 		</div>
