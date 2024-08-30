@@ -7,11 +7,12 @@ import { useNavigate, useNavigation, useParams } from 'react-router-dom';
 
 import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { localStorageUserIdKey } from '@/utils/accessToken';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Comments } from './Comments';
 import { DeletePost } from './DeletePost';
-import { EditPost } from './EditPost';
+import { UpdatePost } from './UpdatePost';
 import { NewComment } from './NewComment';
 import { PostDetails } from './PostDetails';
 
@@ -28,7 +29,7 @@ export const Post = () => {
 		error,
 		isLoading,
 	} = useQuery({
-		queryKey: ['fetchPost'],
+		queryKey: [ReactQueryKeys.fetchPost],
 		queryFn: async () => {
 			const response: AxiosResponse<PostDTO> = await appAxiosInstance.get(ApiPostRoutes.getPost(Number(id)));
 			const post = response.data;
@@ -52,7 +53,7 @@ export const Post = () => {
 						onClick={() => navigate(AppRoutes.toDashboard)}
 					/>
 					<div className="flex items-center">
-						{isPostCreatedByCurrentLoggedInUser && <EditPost />}
+						{isPostCreatedByCurrentLoggedInUser && <UpdatePost post={post} />}
 						{isPostCreatedByCurrentLoggedInUser && <DeletePost post={post} />}
 					</div>
 				</div>

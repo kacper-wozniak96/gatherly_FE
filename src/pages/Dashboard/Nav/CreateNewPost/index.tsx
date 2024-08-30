@@ -1,3 +1,4 @@
+import { PostForm } from '@/components/PostForm';
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
@@ -91,7 +92,7 @@ export const CreateNewPost = () => {
 						<X className="h-7 w-7" />
 						{/* <span className="sr-only">Close</span> */}
 					</DialogClose>
-					<form onSubmit={handleSubmit((data) => createPostMutation(data))}>
+					{/* <form onSubmit={handleSubmit((data) => createPostMutation(data))}>
 						<div className="my-5">
 							<Label htmlFor="title" className="" isRequired>
 								Post Title
@@ -112,7 +113,12 @@ export const CreateNewPost = () => {
 						<DialogFooter>
 							<Button type="submit">Save changes</Button>
 						</DialogFooter>
-					</form>
+					</form> */}
+					<PostForm
+						errors={errors}
+						onSubmit={handleSubmit((data) => createPostMutation(data))}
+						register={register}
+					/>
 				</DialogContent>
 			</Dialog>
 		</div>

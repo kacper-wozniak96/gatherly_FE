@@ -1,5 +1,6 @@
 export class ApiPostRoutes {
 	static createPost = `/post`;
+	static updatePost = (postId: number) => `/post/${postId}`;
 	static getPosts = (offset: number, search: string) => `/post?offset=${offset}&search=${search}`;
 	static getPost = (postId: number) => `/post/${postId}`;
 	static upVotePost = (postId: number) => `/post/${postId}/upvote`;
