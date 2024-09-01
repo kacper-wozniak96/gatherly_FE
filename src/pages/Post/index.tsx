@@ -3,7 +3,7 @@ import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { useNavigate, useNavigation, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

@@ -41,22 +41,20 @@ export const DeletePost = ({ post }: Props) => {
 
 	return (
 		<AlertDialog>
-			<AlertDialogTrigger asChild>
-				<div>
-					<TooltipProvider>
-						<Tooltip>
-							<TooltipTrigger asChild>
-								<Button variant="destructive" className="-right-8 top-1/4 px-2 py-0">
-									<MdDelete className="text-2xl" />
-								</Button>
-							</TooltipTrigger>
-							<TooltipContent>
-								<p>Delete post</p>
-							</TooltipContent>
-						</Tooltip>
-					</TooltipProvider>
-				</div>
-			</AlertDialogTrigger>
+			<TooltipProvider>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<AlertDialogTrigger asChild>
+							<Button variant="destructive" className="-right-8 top-1/4 px-2 py-0">
+								<MdDelete className="text-2xl" />
+							</Button>
+						</AlertDialogTrigger>
+					</TooltipTrigger>
+					<TooltipContent>
+						<span>Delete post</span>
+					</TooltipContent>
+				</Tooltip>
+			</TooltipProvider>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle className="text-2xl">Are you absolutely sure?</AlertDialogTitle>

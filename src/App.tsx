@@ -1,6 +1,7 @@
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { AppRoutes } from './components/routes/AppRoutes';
 import { PrivateRoutes } from './components/routes/PrivateRoutes';
+import { ActivityReport } from './pages/ActivityReport';
 import { ChangePassword } from './pages/ChangePassword';
 import { ChangeUserInformation } from './pages/ChangeUserInformation';
 import { Dashboard } from './pages/Dashboard';
@@ -16,6 +17,7 @@ export function App() {
 					<Route path={AppRoutes.toDashboard} element={<Dashboard />} />
 					<Route path={AppRoutes.toPost} element={<Post />} />
 					<Route path={AppRoutes.toChangeUserInformation} element={<ChangeUserInformation />} />
+					<Route path={AppRoutes.toGenerateActivityReports} element={<ActivityReport />} />
 					<Route path={AppRoutes.toChangePassword} element={<ChangePassword />} />
 					<Route path={AppRoutes.wildCard} element={<Navigate to={AppRoutes.toDashboard} />} />
 				</Route>

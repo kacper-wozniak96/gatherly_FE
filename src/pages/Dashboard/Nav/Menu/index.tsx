@@ -36,6 +36,9 @@ export const Menu = () => {
 							<Link to={AppRoutes.toChangeUserInformation}>
 								<MenubarItem className="cursor-pointer text-xl">Change user information</MenubarItem>
 							</Link>
+							<Link to={AppRoutes.toGenerateActivityReports}>
+								<MenubarItem className="cursor-pointer text-xl">Generate activity report</MenubarItem>
+							</Link>
 							<Link to={AppRoutes.toChangePassword}>
 								<MenubarItem className="cursor-pointer text-xl">Change password</MenubarItem>
 							</Link>

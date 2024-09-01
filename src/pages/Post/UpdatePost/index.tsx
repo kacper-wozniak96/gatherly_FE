@@ -13,6 +13,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { PostForm } from '@/components/PostForm';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { PostDTO } from '@/types/post';
 import { FaPen } from 'react-icons/fa';
 
@@ -47,7 +48,7 @@ export const UpdatePost = ({ post }: Props) => {
 		},
 	});
 
-	const { mutateAsync: createPostMutation } = useMutation({
+	const { mutateAsync: updatePostMutation } = useMutation({
 		mutationFn: async (data: UpdatePostFormValues) => {
 			try {
 				await appAxiosInstance.patch(ApiPostRoutes.updatePost(post.id), data);
@@ -84,11 +85,20 @@ export const UpdatePost = ({ post }: Props) => {
 	return (
 		<div>
 			<Dialog open={isDialogOpen}>
-				<DialogTrigger>
-					<Button className="text-xl p-3 mr-3" onClick={openDialog}>
-						<FaPen />
-					</Button>
-				</DialogTrigger>
+				<TooltipProvider>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<DialogTrigger>
+								<Button className="text-xl p-3 mr-3" onClick={openDialog}>
+									<FaPen />
+								</Button>
+							</DialogTrigger>
+						</TooltipTrigger>
+						<TooltipContent>
+							<span>Edit post</span>
+						</TooltipContent>
+					</Tooltip>
+				</TooltipProvider>
 				<DialogContent className="sm:max-w-[425px]" aria-describedby={undefined}>
 					<DialogHeader>
 						<DialogTitle className="text-2xl">Update post</DialogTitle>
@@ -101,7 +111,7 @@ export const UpdatePost = ({ post }: Props) => {
 					</DialogClose>
 					<PostForm
 						errors={errors}
-						onSubmit={handleSubmit((data) => createPostMutation(data))}
+						onSubmit={handleSubmit((data) => updatePostMutation(data))}
 						register={register}
 					/>
 				</DialogContent>

@@ -16,6 +16,7 @@ import { AxiosResponse } from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaArrowLeft } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
@@ -110,7 +111,8 @@ export const ChangeUserInformation = () => {
 	return (
 		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
 			<div className="w-[60rem] my-5">
-				<h1 className="text-2xl font-bold">User profile edit</h1>
+				<FaArrowLeft className="my-5 text-3xl cursor-pointer" onClick={() => navigate(AppRoutes.toDashboard)} />
+				{/* <h1 className="text-2xl font-bold">User profile edit</h1> */}
 				<form className="my-12 grid gap-5" onSubmit={handleSubmit((data) => updateUserMutation(data))}>
 					<div className="flex items-center">
 						<Avatar className="w-20 h-20 mr-5">

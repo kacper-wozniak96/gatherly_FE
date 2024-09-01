@@ -4,6 +4,7 @@ export class AppRoutes {
 	static toSignIn = '/signIn';
 	static toPost = `/post/:id`;
 	static toChangeUserInformation = `/profile`;
+	static toGenerateActivityReports = '/activityReport';
 	static toChangePassword = `/changePassword`;
 	static wildCard = '*';
 
