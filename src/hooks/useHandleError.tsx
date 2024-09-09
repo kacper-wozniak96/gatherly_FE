@@ -15,7 +15,7 @@ interface IUseCaseError {
 export const useHandleFormError = () => {
 	const { enqueueSnackbar } = useSnackbar();
 
-	const handleFormError = (error: unknown, setError: UseFormSetError<any>) => {
+	const handleFormError = (error: unknown, setError?: UseFormSetError<any>) => {
 		if (!(error instanceof AxiosError)) {
 			enqueueSnackbar('Something went wrong. Try again', { variant: 'error' });
 			return;
@@ -30,9 +30,12 @@ export const useHandleFormError = () => {
 
 		if (customErrorMessage?.isFormInvalid) {
 			const failedFields = customErrorMessage.message as FailedField[];
-			failedFields.forEach((field) => {
-				setError(field.field, { message: field.message });
-			});
+
+			if (setError) {
+				failedFields.forEach((field) => {
+					setError(field.field, { message: field.message });
+				});
+			}
 		} else {
 			enqueueSnackbar(customErrorMessage.message as string, { variant: 'error' });
 		}

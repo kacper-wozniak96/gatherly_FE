@@ -1,3 +1,4 @@
+import { Nav } from '@/components/Nav';
 import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
@@ -6,7 +7,7 @@ import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { createContext, useContext, useMemo, useState } from 'react';
-import { Nav } from './Nav';
+import { DashboardHeader } from './DashboardHeader';
 import { GetPostsResponseDTO, PostsList } from './PostsList';
 
 export interface DashboardContextProps {
@@ -57,13 +58,17 @@ export const Dashboard = () => {
 				postsTotalCount: data?.postsTotalCount,
 			}}
 		>
-			<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
-				<div className="w-[60rem]">
+			<DashboardHeader />
+			<Separator className="bg-slate-300" />
+			<PostsList />
+			{/* <div className="flex justify-center w-screen h-screen bg-slate-200">
+				<nav className="w-[20rem]">
 					<Nav />
-					<Separator className="bg-slate-300" />
-					<PostsList />
+				</nav>
+				<div className="w-[60rem]">
 				</div>
-			</div>
+				<div className="w-[20rem]" />
+			</div> */}
 		</DashboardContext.Provider>
 	);
 };

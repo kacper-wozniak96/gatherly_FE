@@ -6,6 +6,7 @@ import { ChangePassword } from './pages/ChangePassword';
 import { ChangeUserInformation } from './pages/ChangeUserInformation';
 import { Dashboard } from './pages/Dashboard';
 import { Post } from './pages/Post';
+import { PostSettings } from './pages/Post/PostSettings';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
 
@@ -16,6 +17,7 @@ export function App() {
 				<Route element={<PrivateRoutes />}>
 					<Route path={AppRoutes.toDashboard} element={<Dashboard />} />
 					<Route path={AppRoutes.toPost} element={<Post />} />
+					<Route path={AppRoutes.toPostSettings} element={<PostSettings />} />
 					<Route path={AppRoutes.toChangeUserInformation} element={<ChangeUserInformation />} />
 					<Route path={AppRoutes.toGenerateActivityReports} element={<ActivityReport />} />
 					<Route path={AppRoutes.toChangePassword} element={<ChangePassword />} />

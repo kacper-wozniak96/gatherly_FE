@@ -8,22 +8,22 @@ import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { confirmPasswordSchema, passwordSchema, usernameSchema } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
-const signUpFormSchema = z.object({
-	username: z
-		.string({
-			required_error: 'Username is required',
-			invalid_type_error: 'Username must be a string',
-		})
-		.min(3, { message: 'Username must be at least 3 characters long' })
-		.max(30, { message: 'Username must be at most 30 characters long' }),
-	password: z.string(),
-	confirmPassword: z.string(),
-});
+const signUpFormSchema = z
+	.object({
+		username: usernameSchema,
+		password: passwordSchema,
+		confirmPassword: confirmPasswordSchema,
+	})
+	.refine((data) => data.password === data.confirmPassword, {
+		message: 'Passwords do not match',
+		path: ['confirmPassword'],
+	});
 
 type SignUpFormValues = z.infer<typeof signUpFormSchema>;
 

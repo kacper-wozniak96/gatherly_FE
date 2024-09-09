@@ -109,50 +109,46 @@ export const ChangeUserInformation = () => {
 	if (isLoading) return <div>Loading...</div>;
 
 	return (
-		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
-			<div className="w-[60rem] my-5">
-				<FaArrowLeft className="my-5 text-3xl cursor-pointer" onClick={() => navigate(AppRoutes.toDashboard)} />
-				{/* <h1 className="text-2xl font-bold">User profile edit</h1> */}
-				<form className="my-12 grid gap-5" onSubmit={handleSubmit((data) => updateUserMutation(data))}>
-					<div className="flex items-center">
-						<Avatar className="w-20 h-20 mr-5">
-							<AvatarImage src={fileUrl ?? user?.avatarSignedURL ?? ''} alt="@shadcn" />
-							<AvatarFallback className="text-4xl">
-								{getFirstLetterOfUsername(user as UserDTO)}
-							</AvatarFallback>
-						</Avatar>
-						<div className="grow">
-							<Label htmlFor="picture">Avatar</Label>
-							<Input
-								{...register('avatar')}
-								id="picture"
-								type="file"
-								errorMessage={errors?.avatar?.message as any}
-								onChange={handleFileChange}
-							/>
-						</div>
-					</div>
-					<div>
-						<Label htmlFor="username">New username</Label>
+		<>
+			<form className="my-12 grid gap-5" onSubmit={handleSubmit((data) => updateUserMutation(data))}>
+				<div className="flex items-center">
+					<Avatar className="w-20 h-20 mr-5">
+						<AvatarImage src={fileUrl ?? user?.avatarSignedURL ?? ''} alt="@shadcn" />
+						<AvatarFallback className="text-4xl">
+							{getFirstLetterOfUsername(user as UserDTO)}
+						</AvatarFallback>
+					</Avatar>
+					<div className="grow">
+						<Label htmlFor="picture">Avatar</Label>
 						<Input
-							{...register('username')}
-							id="username"
-							placeholder="Username"
-							errorMessage={errors?.username?.message}
+							{...register('avatar')}
+							id="picture"
+							type="file"
+							errorMessage={errors?.avatar?.message as any}
+							onChange={handleFileChange}
 						/>
 					</div>
-					<div className="flex justify-end">
-						<Button className="text-xl" type="submit">
-							Update
+				</div>
+				<div>
+					<Label htmlFor="username">New username</Label>
+					<Input
+						{...register('username')}
+						id="username"
+						placeholder="Username"
+						errorMessage={errors?.username?.message}
+					/>
+				</div>
+				<div className="flex justify-end">
+					<Button className="text-xl" type="submit">
+						Update
+					</Button>
+					<Link to={AppRoutes.toDashboard}>
+						<Button className="ml-2 text-xl" variant="outline">
+							Cancel
 						</Button>
-						<Link to={AppRoutes.toDashboard}>
-							<Button className="ml-2 text-xl" variant="outline">
-								Cancel
-							</Button>
-						</Link>
-					</div>
-				</form>
-			</div>
-		</div>
+					</Link>
+				</div>
+			</form>
+		</>
 	);
 };

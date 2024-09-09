@@ -6,15 +6,19 @@ import { AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { AppRoutes } from '@/components/routes/AppRoutes';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { localStorageUserIdKey } from '@/utils/accessToken';
 import { FaArrowLeft } from 'react-icons/fa';
+import { RiUserSettingsFill } from 'react-icons/ri';
+import { PostBreadcrumbs } from './Breadcrumbs';
 import { Comments } from './Comments';
 import { DeletePost } from './DeletePost';
-import { UpdatePost } from './UpdatePost';
 import { NewComment } from './NewComment';
 import { PostDetails } from './PostDetails';
+import { UpdatePost } from './UpdatePost';
 
 export const Post = () => {
 	const { id } = useParams<{ id: string }>();
@@ -45,29 +49,40 @@ export const Post = () => {
 	const isPostCreatedByCurrentLoggedInUser = Number(storedUserId) === post.user.id;
 
 	return (
-		<div className="flex flex-col items-center w-screen h-screen bg-slate-200">
-			<div className="w-[60rem]">
-				<div className="flex items-center justify-between">
-					<FaArrowLeft
-						className="my-5 text-3xl cursor-pointer"
-						onClick={() => navigate(AppRoutes.toDashboard)}
-					/>
-					<div className="flex items-center">
-						{isPostCreatedByCurrentLoggedInUser && <UpdatePost post={post} />}
-						{isPostCreatedByCurrentLoggedInUser && <DeletePost post={post} />}
-					</div>
-				</div>
-				<PostDetails post={post} />
-				<Card>
-					<CardHeader>
-						<CardTitle>Comments</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<NewComment post={post} />
-						<Comments />
-					</CardContent>
-				</Card>
+		<>
+			<PostBreadcrumbs />
+			{/* <FaArrowLeft className="my-5 text-3xl cursor-pointer" onClick={() => navigate(AppRoutes.toDashboard)} /> */}
+			<div className="flex justify-end">
+				{isPostCreatedByCurrentLoggedInUser && (
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger asChild>
+								<Button
+									className="text-3xl p-3 mr-3 bg-slate-500 hover:bg-slate-500"
+									onClick={() => navigate(AppRoutes.redirectToPostSettings(Number(id)))}
+								>
+									<RiUserSettingsFill />
+								</Button>
+							</TooltipTrigger>
+							<TooltipContent>
+								<span>Post settings</span>
+							</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+				)}
+				{isPostCreatedByCurrentLoggedInUser && <UpdatePost post={post} />}
+				{isPostCreatedByCurrentLoggedInUser && <DeletePost post={post} />}
 			</div>
-		</div>
+			<PostDetails post={post} />
+			<Card>
+				<CardHeader>
+					<CardTitle>Comments</CardTitle>
+				</CardHeader>
+				<CardContent>
+					<NewComment post={post} />
+					<Comments />
+				</CardContent>
+			</Card>
+		</>
 	);
 };
