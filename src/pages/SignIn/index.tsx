@@ -68,9 +68,9 @@ export const SignIn = () => {
 	});
 
 	function handleLoginSuccess(response: AxiosResponse<LoginUserResponseDTO>) {
-		const accessToken = response.data.accessToken;
+		// const accessToken = response.data.accessToken;
 		const userId = response.data.user.id;
-		Cookies.set(accessTokenKey, accessToken);
+		// Cookies.set(accessTokenKey, accessToken);
 		localStorage.setItem(localStorageUserIdKey, String(userId));
 		navigate(AppRoutes.toDashboard);
 		enqueueSnackbar('Successfully signed in', { variant: 'success' });
