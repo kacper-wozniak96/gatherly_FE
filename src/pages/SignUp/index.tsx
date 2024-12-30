@@ -8,24 +8,11 @@ import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
-import { confirmPasswordSchema, passwordSchema, usernameSchema } from 'gatherly-types';
+import { CreateUserRequestDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
-
-const signUpFormSchema = z
-	.object({
-		username: usernameSchema,
-		password: passwordSchema,
-		confirmPassword: confirmPasswordSchema,
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: 'Passwords do not match',
-		path: ['confirmPassword'],
-	});
-
-type SignUpFormValues = z.infer<typeof signUpFormSchema>;
+import { signUpFormSchema, SignUpFormValues } from './utils/formSchema';
 
 export const SignUp = () => {
 	const navigate = useNavigate();
@@ -44,7 +31,9 @@ export const SignUp = () => {
 	const { mutateAsync: signUpUserMutation } = useMutation({
 		mutationFn: async (data: SignUpFormValues) => {
 			try {
-				await appAxiosInstance.post(ApiUserRoutes.createUser, data);
+				const dto: CreateUserRequestDTO = data;
+
+				await appAxiosInstance.post(ApiUserRoutes.createUser, dto);
 				enqueueSnackbar('Account has been created', { variant: 'success' });
 				navigate(AppRoutes.toSignIn);
 			} catch (error) {

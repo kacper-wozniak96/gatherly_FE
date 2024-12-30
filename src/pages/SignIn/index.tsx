@@ -5,25 +5,17 @@ import { Label } from '@/components/ui/label';
 import { useHandleFormError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
-import { LoginUserResponseDTO } from '@/types/user';
-import { accessTokenKey, localStorageUserIdKey } from '@/utils/accessToken';
+import { localStorageUserIdKey } from '@/utils/accessToken';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Card } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import Cookies from 'js-cookie';
+import { LoginUserRequestDTO, LoginUserResponseDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { FaUserSecret } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { z } from 'zod';
-
-const signInFormSchema = z.object({
-	username: z.string(),
-	password: z.string(),
-});
-
-type SignInFormValues = z.infer<typeof signInFormSchema>;
+import { signInFormSchema, SignInFormValues } from './utils/formSchema';
 
 export const SignIn = () => {
 	const navigate = useNavigate();
@@ -42,9 +34,11 @@ export const SignIn = () => {
 	const { mutateAsync: signInUserMutation } = useMutation({
 		mutationFn: async (data: SignInFormValues) => {
 			try {
+				const dto: LoginUserRequestDTO = data;
+
 				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(
 					ApiUserRoutes.login,
-					data
+					dto
 				);
 				handleLoginSuccess(response);
 			} catch (error) {
@@ -56,10 +50,15 @@ export const SignIn = () => {
 	const { mutateAsync: signInAsGuestUserMutation } = useMutation({
 		mutationFn: async () => {
 			try {
-				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(ApiUserRoutes.login, {
+				const dto: LoginUserRequestDTO = {
 					username: 'guest',
 					password: 'guest',
-				});
+				};
+
+				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(
+					ApiUserRoutes.login,
+					dto
+				);
 				handleLoginSuccess(response);
 			} catch (error) {
 				handleFormError(error, setError);
@@ -68,9 +67,7 @@ export const SignIn = () => {
 	});
 
 	function handleLoginSuccess(response: AxiosResponse<LoginUserResponseDTO>) {
-		// const accessToken = response.data.accessToken;
 		const userId = response.data.user.id;
-		// Cookies.set(accessTokenKey, accessToken);
 		localStorage.setItem(localStorageUserIdKey, String(userId));
 		navigate(AppRoutes.toDashboard);
 		enqueueSnackbar('Successfully signed in', { variant: 'success' });

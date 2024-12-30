@@ -33,7 +33,7 @@
         "clsx": "^2.1.1",
         "date-fns": "^3.6.0",
         "dotenv": "^16.4.5",
-        "gatherly-types": "1.0.8",
+        "gatherly-types": "1.0.17",
         "js-cookie": "^3.0.5",
         "lucide-react": "^0.427.0",
         "notistack": "^3.0.1",

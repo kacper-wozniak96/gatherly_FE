@@ -1,6 +1,5 @@
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
-import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { localStorageUserIdKey } from '@/utils/accessToken';
-import { FaArrowLeft } from 'react-icons/fa';
+import { PostDTO } from 'gatherly-types';
 import { RiUserSettingsFill } from 'react-icons/ri';
 import { PostBreadcrumbs } from './Breadcrumbs';
 import { Comments } from './Comments';
@@ -51,7 +50,6 @@ export const Post = () => {
 	return (
 		<>
 			<PostBreadcrumbs />
-			{/* <FaArrowLeft className="my-5 text-3xl cursor-pointer" onClick={() => navigate(AppRoutes.toDashboard)} /> */}
 			<div className="flex justify-end">
 				{isPostCreatedByCurrentLoggedInUser && (
 					<TooltipProvider>
