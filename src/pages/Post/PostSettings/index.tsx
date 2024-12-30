@@ -1,8 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { PostBreadcrumbs } from '../Breadcrumbs';
 
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Label } from '@/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
 	Select,
 	SelectContent,
@@ -12,13 +15,16 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
+import { cn } from '@/lib/utils';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { UserDTO } from '@/types/user';
 import { Separator } from '@radix-ui/react-separator';
 import { AxiosResponse } from 'axios';
-import { useState } from 'react';
+import { debounce } from 'lodash';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bans, EBanType } from './Bans';
 
@@ -32,16 +38,26 @@ export interface PostUserBanDTO {
 export const PostSettings = () => {
 	const { id } = useParams();
 
-	const [selectedUserId, setSelectedUserId] = useState<string>('');
+	const [inputValue, setInputValue] = useState<string>('');
+
+	const [open, setOpen] = useState(false);
+	const [selectedUser, setSelectedUser] = useState<UserDTO | undefined>(undefined);
+
+	const debouncedInputChange = useCallback(
+		debounce(async (input: string) => {
+			setInputValue(input);
+		}, 300),
+		[]
+	);
 
 	const {
 		isPending,
 		isError,
-		data: users,
+		data: users = [],
 		error,
-		isLoading,
+		isLoading: isLoadingUsers,
 	} = useQuery({
-		queryKey: [ReactQueryKeys.fetchUsers],
+		queryKey: [ReactQueryKeys.fetchUsers, inputValue],
 		queryFn: async () => {
 			const response: AxiosResponse<UserDTO[]> = await appAxiosInstance.get(ApiPostRoutes.getUsers);
 			const users = response.data;
@@ -51,42 +67,63 @@ export const PostSettings = () => {
 	});
 
 	const bansQuery = useQuery({
-		queryKey: [ReactQueryKeys.fetchPostUserBans, selectedUserId],
+		queryKey: [ReactQueryKeys.fetchPostUserBans, selectedUser?.id],
 		queryFn: async () => {
 			const response: AxiosResponse<PostUserBanDTO[]> = await appAxiosInstance.get(
-				ApiPostRoutes.getPostUserBans(Number(id), Number(selectedUserId))
+				ApiPostRoutes.getPostUserBans(Number(id), Number(selectedUser?.id))
 			);
 			const postBansForUser = response.data;
 
 			return postBansForUser;
 		},
-		enabled: !!selectedUserId,
+		enabled: !!selectedUser?.id,
 	});
-
-	console.log({ selectedUserId, data: bansQuery.data });
 
 	return (
 		<div>
 			<PostBreadcrumbs />
 			<h1 className="text-2xl font-bold">Post permissions</h1>
 			<div className="my-5">
-				<Label>User</Label>
-				<Select onValueChange={(val) => setSelectedUserId(val)}>
-					<SelectTrigger className="w-[180px] text-xl">
-						<SelectValue placeholder="Select a user" />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectGroup>
-							{users?.map((user) => (
-								<SelectItem key={user.id} value={String(user.id)} className="text-xl">
-									{user.username}
-								</SelectItem>
-							))}
-						</SelectGroup>
-					</SelectContent>
-				</Select>
-				{bansQuery?.data && selectedUserId && (
-					<Bans userId={Number(selectedUserId)} postUserBans={bansQuery.data} />
+				<Popover open={open} onOpenChange={setOpen}>
+					<PopoverTrigger asChild>
+						<Button
+							variant="outline"
+							role="combobox"
+							aria-expanded={open}
+							className="w-[200px] justify-between text-xl"
+						>
+							{selectedUser?.username || 'Select a user ...'}
+							<ChevronsUpDown className="opacity-50" />
+						</Button>
+					</PopoverTrigger>
+					<PopoverContent className="w-[200px] p-0">
+						<Command>
+							<CommandInput
+								placeholder="Search user ..."
+								onValueChange={(val) => debouncedInputChange(val)}
+							/>
+							<CommandList>
+								<CommandEmpty>No users found.</CommandEmpty>
+								<CommandGroup>
+									{users.map((user) => (
+										<CommandItem
+											key={user.id}
+											value={String(user.id)}
+											onSelect={(currentValue) => {
+												setSelectedUser(users.find((u) => u.id === Number(currentValue)));
+												setOpen(false);
+											}}
+										>
+											{user.username}
+										</CommandItem>
+									))}
+								</CommandGroup>
+							</CommandList>
+						</Command>
+					</PopoverContent>
+				</Popover>
+				{bansQuery?.data && selectedUser?.id && (
+					<Bans userId={Number(selectedUser.id)} postUserBans={bansQuery.data} />
 				)}
 			</div>
 		</div>
