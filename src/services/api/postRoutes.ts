@@ -8,7 +8,7 @@ export class ApiPostRoutes {
 	static downVotePost = (postId: number) => `/post/${postId}/downvote`;
 	static createComment = `/comment`;
 	static getUser = (userId: number) => `/user/${userId}`;
-	static getUsers = '/user';
+	static getUsers = (search: string) => `/user?search=${search}`;
 	static updateUser = (userId: number) => `/user/${userId}`;
 	static getComments = (postId: number, offset: number) => `/post/${postId}/comments?offset=${offset}`;
 	static deleteComment = (postId: number, commentId: number) => `/post/${postId}/comment/${commentId}`;

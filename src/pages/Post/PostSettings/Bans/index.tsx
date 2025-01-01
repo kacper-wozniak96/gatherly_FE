@@ -9,41 +9,12 @@ import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ApplyPostBanRequestDTO, EBanType } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { z } from 'zod';
-
-interface BansProps {
-	userId: number;
-	postUserBans: PostUserBanDTO[];
-}
-
-export interface PostUserBanDTO {
-	id: number;
-	type: EBanType;
-	userId: number;
-	postId: number;
-}
-
-export enum EBanType {
-	viewingPost = 1,
-	addingComments,
-	downVotingAndUpVoting,
-}
-
-export interface ApplyPostBanRequestDTO {
-	bansChanges: Partial<Record<EBanType, boolean>>;
-}
-
-const postBansFormSchema = z.object({
-	isBannedFromViewingPost: z.boolean(),
-	isBannedFromAddingComments: z.boolean(),
-	isBannedFromVoting: z.boolean(),
-});
-
-type PostBansFormValues = z.infer<typeof postBansFormSchema>;
+import { BansProps, postBansFormSchema, PostBansFormValues } from './types';
 
 export const Bans = ({ userId, postUserBans }: BansProps) => {
 	const { id } = useParams();
