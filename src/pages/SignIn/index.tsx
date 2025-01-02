@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { FaUserSecret } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { signInFormSchema, SignInFormValues } from './utils/formSchema';
+import { signInFormSchema, SignInFormType } from './types';
 
 export const SignIn = () => {
 	const navigate = useNavigate();
@@ -27,12 +27,12 @@ export const SignIn = () => {
 		handleSubmit,
 		setError,
 		formState: { errors },
-	} = useForm<SignInFormValues>({
+	} = useForm<SignInFormType>({
 		resolver: zodResolver(signInFormSchema),
 	});
 
 	const { mutateAsync: signInUserMutation } = useMutation({
-		mutationFn: async (data: SignInFormValues) => {
+		mutationFn: async (data: SignInFormType) => {
 			try {
 				const dto: LoginUserRequestDTO = data;
 

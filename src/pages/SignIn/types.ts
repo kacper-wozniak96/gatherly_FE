@@ -5,4 +5,4 @@ export const signInFormSchema = z.object({
 	password: z.string(),
 });
 
-export type SignInFormValues = z.infer<typeof signInFormSchema>;
+export type SignInFormType = z.infer<typeof signInFormSchema>;
