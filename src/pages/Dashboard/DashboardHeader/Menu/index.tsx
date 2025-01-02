@@ -4,7 +4,7 @@ import { MdLogout } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { accessTokenKey, localStorageUserIdKey } from '@/utils/accessToken';
@@ -14,7 +14,7 @@ import { useSnackbar } from 'notistack';
 export const Logout = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 
 	const { mutateAsync: logout } = useMutation({
 		mutationFn: async () => {
@@ -24,7 +24,7 @@ export const Logout = () => {
 				localStorage.removeItem(localStorageUserIdKey);
 				navigate(AppRoutes.toSignIn);
 			} catch (error) {
-				handleFormError(error);
+				handleError(error);
 			}
 		},
 	});

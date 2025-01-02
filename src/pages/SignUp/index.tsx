@@ -2,7 +2,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,7 +17,7 @@ import { signUpFormSchema, SignUpFormValues } from './utils/formSchema';
 export const SignUp = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 
 	const {
 		register,
@@ -37,7 +37,7 @@ export const SignUp = () => {
 				enqueueSnackbar('Account has been created', { variant: 'success' });
 				navigate(AppRoutes.toSignIn);
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 	});

@@ -1,54 +1,37 @@
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogCancel,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-	AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { CommentDTO } from '@/types/post';
-import { UserDTO } from '@/types/user';
-import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
-import { Separator } from '@radix-ui/react-separator';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { GetCommentsResponseDTO } from 'gatherly-types';
 import { useMemo, useState } from 'react';
-import { MdDelete } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import { CustomPagination } from '../../../components/CustomPagination';
 import { Comment } from './Comment';
 import { CommentsListSkeleton } from './CommentsListSkeleton';
 import { NoComments } from './NoComments';
 
-export interface GetCommentsResponseDTO {
-	comments: CommentDTO[];
-	commentsTotalCount: number;
-}
-
 export const Comments = () => {
 	const { id } = useParams<{ id: string }>();
 	const [selectedPage, setSelectedPage] = useState(1);
+
+	const { handleError } = useHandleError();
 
 	const offset = useMemo(() => (selectedPage - 1) * 5, [selectedPage]);
 
 	const { isPending, isError, data, error, isLoading } = useQuery({
 		queryKey: [ReactQueryKeys.fetchComments, id, offset],
 		queryFn: async () => {
-			const response: AxiosResponse<GetCommentsResponseDTO> = await appAxiosInstance.get(
-				ApiPostRoutes.getComments(Number(id), offset)
-			);
+			try {
+				const response: AxiosResponse<GetCommentsResponseDTO> = await appAxiosInstance.get(
+					ApiPostRoutes.getComments(Number(id), offset)
+				);
 
-			return response.data;
+				return response.data;
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 

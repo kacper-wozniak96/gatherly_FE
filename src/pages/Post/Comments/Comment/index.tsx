@@ -5,10 +5,7 @@ import { localStorageUserIdKey } from '@/utils/accessToken';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
 import { Separator } from '@radix-ui/react-separator';
 import { DeleteButton } from './DeleteButton';
-
-interface Props {
-	comment: CommentDTO;
-}
+import { Props } from './types';
 
 export const Comment = ({ comment }: Props) => {
 	const storedUserId = localStorage.getItem(localStorageUserIdKey);

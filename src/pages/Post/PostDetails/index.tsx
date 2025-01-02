@@ -1,33 +1,32 @@
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { PostDTO } from '@/types/post';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { useHandleError } from '@/hooks/useHandleError';
 import { UserDTO } from '@/types/user';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
+import { PostDTO } from 'gatherly-types';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
-
-interface PostDetailsProps {
-	post: PostDTO;
-}
+import { PostDetailsProps } from './types';
 
 export const PostDetails = ({ post }: PostDetailsProps) => {
 	const queryClient = useQueryClient();
+	const { handleError } = useHandleError();
 
 	const { mutateAsync: upVotePost } = useMutation({
 		mutationFn: async () => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.upVotePost((post as PostDTO).id));
-			} catch (error) {}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 
@@ -35,11 +34,11 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 		mutationFn: async () => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.downVotePost((post as PostDTO).id));
-			} catch (error) {}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 

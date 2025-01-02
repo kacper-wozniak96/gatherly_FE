@@ -1,21 +1,12 @@
 import { AxiosError } from 'axios';
+import { IFailedField, IUseCaseError } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { UseFormSetError } from 'react-hook-form';
 
-interface FailedField {
-	field: string;
-	message: string;
-}
-
-interface IUseCaseError {
-	message: string | FailedField[];
-	isFormInvalid: boolean;
-}
-
-export const useHandleFormError = () => {
+export const useHandleError = () => {
 	const { enqueueSnackbar } = useSnackbar();
 
-	const handleFormError = (error: unknown, setError?: UseFormSetError<any>) => {
+	const handleError = (error: unknown, setError?: UseFormSetError<any>) => {
 		if (!(error instanceof AxiosError)) {
 			enqueueSnackbar('Something went wrong. Try again', { variant: 'error' });
 			return;
@@ -26,20 +17,25 @@ export const useHandleFormError = () => {
 			return;
 		}
 
-		const customErrorMessage = error.response?.data as IUseCaseError;
+		const useCaseError = error.response?.data as IUseCaseError;
 
-		if (customErrorMessage?.isFormInvalid) {
-			const failedFields = customErrorMessage.message as FailedField[];
+		if (useCaseError?.isFormInvalid && setError) {
+			const failedFields = useCaseError.message as IFailedField[];
 
-			if (setError) {
-				failedFields.forEach((field) => {
-					setError(field.field, { message: field.message });
-				});
-			}
-		} else {
-			enqueueSnackbar(customErrorMessage.message as string, { variant: 'error' });
+			failedFields.forEach((failedField) => {
+				setError(failedField.field, { message: failedField.message });
+			});
+
+			return;
 		}
+
+		enqueueSnackbar(useCaseError.message as string, { variant: 'error' });
+		// if (customErrorMessage.isForSnackbar) {
+		// 	return;
+		// }
+
+		// enqueueSnackbar('Something went wrong. Try again in few mins', { variant: 'error' });
 	};
 
-	return { handleFormError };
+	return { handleError };
 };

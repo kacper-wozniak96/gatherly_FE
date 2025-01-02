@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Separator } from '@/components/ui/separator';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -20,7 +20,7 @@ export const Bans = ({ userId, postUserBans }: BansProps) => {
 	const { id } = useParams();
 	const queryClient = useQueryClient();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 	const navigate = useNavigate();
 
 	const form = useForm<PostBansFormValues>({
@@ -67,7 +67,7 @@ export const Bans = ({ userId, postUserBans }: BansProps) => {
 				navigate(AppRoutes.redirectToPost(Number(id)));
 				form.reset();
 			} catch (error) {
-				handleFormError(error, form.setError);
+				handleError(error, form.setError);
 			}
 		},
 	});
@@ -78,8 +78,9 @@ export const Bans = ({ userId, postUserBans }: BansProps) => {
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit((data) => applyBanMutation(data))} className="space-y-6">
 					<FormField
+						{...form.register('isBannedFromViewingPost')}
 						control={form.control}
-						name="isBannedFromViewingPost"
+						// name="isBannedFromViewingPost"
 						render={({ field }) => (
 							<FormItem className="flex items-center">
 								<FormControl className="mr-3">

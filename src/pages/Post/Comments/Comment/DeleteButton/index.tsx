@@ -11,31 +11,28 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { CommentDTO } from '@/types/post';
-import { localStorageUserIdKey } from '@/utils/accessToken';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { enqueueSnackbar } from 'notistack';
 import { MdDelete } from 'react-icons/md';
-
-interface Props {
-	comment: CommentDTO;
-}
+import { Props } from './types';
 
 export const DeleteButton = ({ comment }: Props) => {
 	const queryClient = useQueryClient();
+	const { handleError } = useHandleError();
 
 	const { mutateAsync: deleteCommentMutation } = useMutation({
 		mutationFn: async () => {
 			try {
 				await appAxiosInstance.delete(ApiPostRoutes.deleteComment(comment.postId, comment.id));
 				enqueueSnackbar('Comment has been deleted', { variant: 'success' });
-			} catch (error) {}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchComments] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchComments] });
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 

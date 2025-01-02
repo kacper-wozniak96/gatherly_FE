@@ -1,36 +1,20 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { PostDTO } from '@/types/post';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CreateCommentRequestDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-interface NewCommentProps {
-	post: PostDTO;
-}
-
-const createCommentFormSchema = z.object({
-	comment: z.string().trim().min(1).max(1000),
-});
-
-type CreateCommentFormValues = z.infer<typeof createCommentFormSchema>;
-
-interface CreateCommentRequestDTO {
-	postId: number;
-	comment: string;
-}
+import { createCommentFormSchema, CreateCommentFormValues, NewCommentProps } from './types';
 
 export const NewComment = ({ post }: NewCommentProps) => {
 	const queryClient = useQueryClient();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 
 	const {
 		register,
@@ -45,19 +29,18 @@ export const NewComment = ({ post }: NewCommentProps) => {
 	const { mutateAsync: createComment } = useMutation({
 		mutationFn: async (data: CreateCommentFormValues) => {
 			try {
-				const requestData: CreateCommentRequestDTO = {
-					postId: post.id,
-					comment: data.comment,
+				const dto: CreateCommentRequestDTO = {
+					comment: data.comment as string,
 				};
-				await appAxiosInstance.post(ApiPostRoutes.createComment, requestData);
+				await appAxiosInstance.post(ApiPostRoutes.createPostComment(post.id), dto);
+
+				reset();
+				enqueueSnackbar('Comment added', { variant: 'success' });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchComments] });
 			} catch (error) {
-				handleFormError(error, setError);
+				console.log({ error });
+				handleError(error, setError);
 			}
-		},
-		onSuccess: () => {
-			reset();
-			enqueueSnackbar('Comment added', { variant: 'success' });
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchComments] });
 		},
 	});
 

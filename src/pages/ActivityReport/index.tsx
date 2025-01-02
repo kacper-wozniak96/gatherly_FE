@@ -2,7 +2,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,7 +25,7 @@ type GenerateReportFormValues = z.infer<typeof generateReportForm>;
 
 export const ActivityReport = () => {
 	const navigate = useNavigate();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 	const { enqueueSnackbar } = useSnackbar();
 
 	const fileId = useMemo(() => uuidv4(), []);
@@ -49,7 +49,7 @@ export const ActivityReport = () => {
 				);
 				navigate(AppRoutes.toDashboard);
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 	});

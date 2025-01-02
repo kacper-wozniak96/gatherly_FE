@@ -1,7 +1,7 @@
 import { PostForm } from '@/components/PostForm';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -22,7 +22,7 @@ type CreatePostFormValues = z.infer<typeof createPostInFormSchema>;
 
 export const CreateNewPost = () => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 	const { enqueueSnackbar } = useSnackbar();
 	const queryClient = useQueryClient();
 
@@ -43,7 +43,7 @@ export const CreateNewPost = () => {
 				enqueueSnackbar('Post has been created', { variant: 'success' });
 				closeDialog();
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 		onSuccess: () => {

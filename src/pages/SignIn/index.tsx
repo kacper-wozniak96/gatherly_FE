@@ -2,7 +2,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { localStorageUserIdKey } from '@/utils/accessToken';
@@ -20,7 +20,7 @@ import { signInFormSchema, SignInFormValues } from './utils/formSchema';
 export const SignIn = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 
 	const {
 		register,
@@ -42,7 +42,7 @@ export const SignIn = () => {
 				);
 				handleLoginSuccess(response);
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 	});
@@ -61,7 +61,7 @@ export const SignIn = () => {
 				);
 				handleLoginSuccess(response);
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 	});

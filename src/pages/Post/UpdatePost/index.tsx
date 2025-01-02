@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -10,27 +10,16 @@ import { X } from 'lucide-react';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { PostForm } from '@/components/PostForm';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { PostDTO } from '@/types/post';
+import { UpdatePostRequestDTO } from 'gatherly-types';
 import { FaPen } from 'react-icons/fa';
-
-const updatePostInFormSchema = z.object({
-	title: z.string().min(3),
-	text: z.string(),
-});
-
-type UpdatePostFormValues = z.infer<typeof updatePostInFormSchema>;
-
-interface Props {
-	post: PostDTO;
-}
+import { Props, UpdatePostFormValues, updatePostInFormSchema } from './types';
 
 export const UpdatePost = ({ post }: Props) => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 	const { enqueueSnackbar } = useSnackbar();
 	const queryClient = useQueryClient();
 
@@ -39,7 +28,7 @@ export const UpdatePost = ({ post }: Props) => {
 		handleSubmit,
 		setError,
 		reset,
-		formState: { errors },
+		formState: { errors, dirtyFields },
 	} = useForm<UpdatePostFormValues>({
 		resolver: zodResolver(updatePostInFormSchema),
 		defaultValues: {
@@ -51,15 +40,23 @@ export const UpdatePost = ({ post }: Props) => {
 	const { mutateAsync: updatePostMutation } = useMutation({
 		mutationFn: async (data: UpdatePostFormValues) => {
 			try {
-				await appAxiosInstance.patch(ApiPostRoutes.updatePost(post.id), data);
+				const dto: UpdatePostRequestDTO = {};
+
+				if (dirtyFields.title) {
+					dto.title = data.title;
+				}
+
+				if (dirtyFields.text) {
+					dto.text = data.text;
+				}
+
+				await appAxiosInstance.patch(ApiPostRoutes.updatePost(post.id), dto);
 				enqueueSnackbar('Post has been updated', { variant: 'success' });
 				closeDialog();
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPost] });
 		},
 	});
 

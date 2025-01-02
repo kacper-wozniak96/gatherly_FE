@@ -6,7 +6,7 @@ export class ApiPostRoutes {
 	static getPostUserBans = (postId: number, userId: number) => `/post/${postId}/bans/user/${userId}`;
 	static upVotePost = (postId: number) => `/post/${postId}/upvote`;
 	static downVotePost = (postId: number) => `/post/${postId}/downvote`;
-	static createComment = `/comment`;
+	static createPostComment = (postId: number) => `post/${postId}/comment`;
 	static getUser = (userId: number) => `/user/${userId}`;
 	static getUsers = (search: string) => `/user?search=${search}`;
 	static updateUser = (userId: number) => `/user/${userId}`;

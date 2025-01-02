@@ -8,7 +8,7 @@ import {
 	BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { useMemo } from 'react';
-import { matchPath, useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export function PostBreadcrumbs() {
 	const { pathname } = useLocation();

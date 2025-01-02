@@ -1,6 +1,6 @@
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useHandleError } from '@/hooks/useHandleError';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { localStorageUserIdKey } from '@/utils/accessToken';
 import { PostDTO } from 'gatherly-types';
@@ -22,6 +23,9 @@ import { UpdatePost } from './UpdatePost';
 export const Post = () => {
 	const { id } = useParams<{ id: string }>();
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
+
+	const { handleError } = useHandleError();
 
 	const storedUserId = localStorage.getItem(localStorageUserIdKey);
 
@@ -34,10 +38,16 @@ export const Post = () => {
 	} = useQuery({
 		queryKey: [ReactQueryKeys.fetchPost],
 		queryFn: async () => {
-			const response: AxiosResponse<PostDTO> = await appAxiosInstance.get(ApiPostRoutes.getPost(Number(id)));
-			const post = response.data;
+			try {
+				const response: AxiosResponse<PostDTO> = await appAxiosInstance.get(ApiPostRoutes.getPost(Number(id)));
+				const post = response.data;
 
-			return post;
+				return post;
+			} catch (error) {
+				handleError(error);
+				navigate(AppRoutes.toDashboard);
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+			}
 		},
 	});
 

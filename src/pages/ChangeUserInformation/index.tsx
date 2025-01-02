@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useHandleFormError } from '@/hooks/useHandleError';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -39,7 +39,7 @@ export const ChangeUserInformation = () => {
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
-	const { handleFormError } = useHandleFormError();
+	const { handleError } = useHandleError();
 
 	const [fileUrl, setFileUrl] = useState<string | null>(null);
 
@@ -93,7 +93,7 @@ export const ChangeUserInformation = () => {
 				navigate(AppRoutes.toDashboard);
 				enqueueSnackbar('Successfully updated user information', { variant: 'success' });
 			} catch (error) {
-				handleFormError(error, setError);
+				handleError(error, setError);
 			}
 		},
 	});
