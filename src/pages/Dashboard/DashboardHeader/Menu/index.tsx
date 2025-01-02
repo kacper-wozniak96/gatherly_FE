@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
-import { ApiPostRoutes } from '@/services/api/postRoutes';
-import { accessTokenKey, localStorageUserIdKey } from '@/utils/accessToken';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
+import { localStorageUserIdKey } from '@/utils/accessToken';
 import { useMutation } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 
@@ -19,7 +19,7 @@ export const Logout = () => {
 	const { mutateAsync: logout } = useMutation({
 		mutationFn: async () => {
 			try {
-				await appAxiosInstance.post(ApiPostRoutes.userLogout);
+				await appAxiosInstance.post(ApiUserRoutes.userLogout);
 				enqueueSnackbar('Logged out successfully', { variant: 'success' });
 				localStorage.removeItem(localStorageUserIdKey);
 				navigate(AppRoutes.toSignIn);

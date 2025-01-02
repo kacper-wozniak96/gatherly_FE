@@ -7,6 +7,7 @@ import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { UserDTO } from '@/types/user';
 import { localStorageUserIdKey } from '@/utils/accessToken';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
@@ -54,7 +55,7 @@ export const ChangeUserInformation = () => {
 		queryFn: async () => {
 			const storedUserId = localStorage.getItem(localStorageUserIdKey);
 			const response: AxiosResponse<UserDTO> = await appAxiosInstance.get(
-				ApiPostRoutes.getUser(Number(storedUserId))
+				ApiUserRoutes.getUser(Number(storedUserId))
 			);
 			const user = response.data;
 			setValue('username', user.username);
@@ -89,7 +90,7 @@ export const ChangeUserInformation = () => {
 
 				const storedUserId = Number(localStorage.getItem(localStorageUserIdKey));
 				if (!Number.isInteger(storedUserId)) return;
-				await appAxiosInstance.post(ApiPostRoutes.updateUser(storedUserId), formData);
+				await appAxiosInstance.post(ApiUserRoutes.updateUser(storedUserId), formData);
 				navigate(AppRoutes.toDashboard);
 				enqueueSnackbar('Successfully updated user information', { variant: 'success' });
 			} catch (error) {

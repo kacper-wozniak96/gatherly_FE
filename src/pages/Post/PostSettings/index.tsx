@@ -15,6 +15,7 @@ import { ChevronsDown } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bans } from './Bans';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
 
 export const PostSettings = () => {
 	const { id } = useParams();
@@ -40,7 +41,7 @@ export const PostSettings = () => {
 	} = useQuery({
 		queryKey: [ReactQueryKeys.fetchUsers, inputValue],
 		queryFn: async () => {
-			const response: AxiosResponse<UserDTO[]> = await appAxiosInstance.get(ApiPostRoutes.getUsers(inputValue));
+			const response: AxiosResponse<UserDTO[]> = await appAxiosInstance.get(ApiUserRoutes.getUsers(inputValue));
 			const users = response.data;
 
 			return users;

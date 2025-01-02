@@ -1,4 +1,3 @@
-import { Nav } from '@/components/Nav';
 import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
@@ -6,7 +5,7 @@ import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { DashboardHeader } from './DashboardHeader';
 import { GetPostsResponseDTO, PostsList } from './PostsList';
 
@@ -61,14 +60,6 @@ export const Dashboard = () => {
 			<DashboardHeader />
 			<Separator className="bg-slate-300" />
 			<PostsList />
-			{/* <div className="flex justify-center w-screen h-screen bg-slate-200">
-				<nav className="w-[20rem]">
-					<Nav />
-				</nav>
-				<div className="w-[60rem]">
-				</div>
-				<div className="w-[20rem]" />
-			</div> */}
 		</DashboardContext.Provider>
 	);
 };

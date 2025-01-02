@@ -7,6 +7,7 @@ import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { CreatePostRequestDTO } from 'gatherly-types';
 import { X } from 'lucide-react';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
@@ -32,7 +33,12 @@ export const CreateNewPost = () => {
 	const { mutateAsync: createPostMutation } = useMutation({
 		mutationFn: async (data: CreatePostFormType) => {
 			try {
-				await appAxiosInstance.post(ApiPostRoutes.createPost, data);
+				const dto: CreatePostRequestDTO = {
+					title: data.title,
+					text: data.text,
+				};
+
+				await appAxiosInstance.post(ApiPostRoutes.createPost, dto);
 				enqueueSnackbar('Post has been created', { variant: 'success' });
 				closeDialog();
 				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
