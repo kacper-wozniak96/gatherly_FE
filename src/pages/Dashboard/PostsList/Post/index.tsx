@@ -5,14 +5,10 @@ import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { PostDTO } from '@/types/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { FaRegComment, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
-
-export interface PostProps {
-	post: PostDTO;
-}
+import { PostProps } from './types';
 
 export const SinglePost = (props: PostProps) => {
 	const { post } = props;

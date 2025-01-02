@@ -1,4 +1,4 @@
-import { localStorageUserIdKey } from '@/utils/accessToken';
+import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
 import Cookies from 'js-cookie';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Nav } from '../Nav';

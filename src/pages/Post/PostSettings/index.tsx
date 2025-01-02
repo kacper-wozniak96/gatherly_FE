@@ -7,15 +7,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { UserDTO } from '@/types/user';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { AxiosResponse } from 'axios';
-import { PostBanDTO } from 'gatherly-types';
+import { PostBanDTO, UserDTO } from 'gatherly-types';
 import { debounce } from 'lodash';
 import { ChevronsDown } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Bans } from './Bans';
-import { ApiUserRoutes } from '@/services/api/userRoutes';
 
 export const PostSettings = () => {
 	const { id } = useParams();

@@ -1,8 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { CommentDTO } from '@/types/post';
-import { UserDTO } from '@/types/user';
-import { localStorageUserIdKey } from '@/utils/accessToken';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
+import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
 import { Separator } from '@radix-ui/react-separator';
 import { DeleteButton } from './DeleteButton';
 import { Props } from './types';
@@ -17,9 +15,7 @@ export const Comment = ({ comment }: Props) => {
 			<div className="flex items-center my-1">
 				<Avatar className="w-8 h-8 mr-2">
 					<AvatarImage src={comment?.user?.avatarSignedURL ?? ''} alt="@shadcn" />
-					<AvatarFallback className="text-xl">
-						{getFirstLetterOfUsername(comment?.user as UserDTO)}
-					</AvatarFallback>
+					<AvatarFallback className="text-xl">{getFirstLetterOfUsername(comment?.user)}</AvatarFallback>
 				</Avatar>
 				<span className="font-light">{comment.user.username}</span>
 			</div>

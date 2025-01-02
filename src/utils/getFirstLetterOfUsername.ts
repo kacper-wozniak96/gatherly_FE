@@ -1,4 +1,4 @@
-import { UserDTO } from '@/types/user';
+import { UserDTO } from 'gatherly-types';
 
 export const getFirstLetterOfUsername = (user: UserDTO) => {
 	return user.username[0].toUpperCase();

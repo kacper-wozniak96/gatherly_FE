@@ -2,12 +2,12 @@ import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { PostDTO } from '@/types/post';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
+import { GetPostsResponseDTO, PostDTO } from 'gatherly-types';
 import { createContext, useMemo, useState } from 'react';
 import { DashboardHeader } from './DashboardHeader';
-import { GetPostsResponseDTO, PostsList } from './PostsList';
+import { PostsList } from './PostsList';
 
 export interface DashboardContextProps {
 	handleSearch: (search: string) => void;

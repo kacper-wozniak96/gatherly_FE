@@ -6,11 +6,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useHandleError } from '@/hooks/useHandleError';
-import { UserDTO } from '@/types/user';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { PostDTO } from 'gatherly-types';
+import { PostDTO, UserDTO } from 'gatherly-types';
 import { FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { PostDetailsProps } from './types';
 
@@ -72,9 +71,7 @@ export const PostDetails = ({ post }: PostDetailsProps) => {
 					<span className="mr-2">Created by:</span>
 					<Avatar className="w-8 h-8 mr-2">
 						<AvatarImage src={post?.user?.avatarSignedURL ?? ''} alt="@shadcn" />
-						<AvatarFallback className="text-xl">
-							{getFirstLetterOfUsername(post?.user as UserDTO)}
-						</AvatarFallback>
+						<AvatarFallback className="text-xl">{getFirstLetterOfUsername(post?.user)}</AvatarFallback>
 					</Avatar>
 					<span className="mr-2 font-bold">{(post as PostDTO).user.username}</span>
 					<span className="mr-2">at</span>
