@@ -11,14 +11,7 @@ import { X } from 'lucide-react';
 import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-
-const createPostInFormSchema = z.object({
-	title: z.string().min(3),
-	text: z.string(),
-});
-
-type CreatePostFormValues = z.infer<typeof createPostInFormSchema>;
+import { CreatePostFormType, createPostSchema } from './types';
 
 export const CreateNewPost = () => {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -32,22 +25,20 @@ export const CreateNewPost = () => {
 		setError,
 		reset,
 		formState: { errors },
-	} = useForm<CreatePostFormValues>({
-		resolver: zodResolver(createPostInFormSchema),
+	} = useForm<CreatePostFormType>({
+		resolver: zodResolver(createPostSchema),
 	});
 
 	const { mutateAsync: createPostMutation } = useMutation({
-		mutationFn: async (data: CreatePostFormValues) => {
+		mutationFn: async (data: CreatePostFormType) => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.createPost, data);
 				enqueueSnackbar('Post has been created', { variant: 'success' });
 				closeDialog();
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 			} catch (error) {
 				handleError(error, setError);
 			}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
 		},
 	});
 
@@ -79,30 +70,8 @@ export const CreateNewPost = () => {
 						className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
 					>
 						<X className="h-7 w-7" />
-						{/* <span className="sr-only">Close</span> */}
 					</DialogClose>
-					{/* <form onSubmit={handleSubmit((data) => createPostMutation(data))}>
-						<div className="my-5">
-							<Label htmlFor="title" className="" isRequired>
-								Post Title
-							</Label>
-							<Input
-								{...register('title')}
-								id="title"
-								className=""
-								errorMessage={errors.title?.message}
-							/>
-						</div>
-						<div className="my-10">
-							<Label htmlFor="text" className="">
-								Post Description
-							</Label>
-							<Textarea {...register('text')} id="text" placeholder="Type your post description" />
-						</div>
-						<DialogFooter>
-							<Button type="submit">Save changes</Button>
-						</DialogFooter>
-					</form> */}
+
 					<PostForm
 						errors={errors}
 						onSubmit={handleSubmit((data) => createPostMutation(data))}

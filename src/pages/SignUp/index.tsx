@@ -12,7 +12,7 @@ import { CreateUserRequestDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { signUpFormSchema, SignUpFormValues } from './utils/formSchema';
+import { signUpFormSchema, SignUpFormType } from './types';
 
 export const SignUp = () => {
 	const navigate = useNavigate();
@@ -24,12 +24,12 @@ export const SignUp = () => {
 		handleSubmit,
 		setError,
 		formState: { errors },
-	} = useForm<SignUpFormValues>({
+	} = useForm<SignUpFormType>({
 		resolver: zodResolver(signUpFormSchema),
 	});
 
 	const { mutateAsync: signUpUserMutation } = useMutation({
-		mutationFn: async (data: SignUpFormValues) => {
+		mutationFn: async (data: SignUpFormType) => {
 			try {
 				const dto: CreateUserRequestDTO = data;
 

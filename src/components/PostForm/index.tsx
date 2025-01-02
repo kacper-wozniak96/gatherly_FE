@@ -20,15 +20,11 @@ export const PostForm = ({ register, onSubmit, errors }: PostFormProps) => {
 	return (
 		<form onSubmit={onSubmit}>
 			<div className="my-5">
-				<Label htmlFor="title" className="" isRequired>
-					Post Title
-				</Label>
+				<Label htmlFor="title">Post Title</Label>
 				<Input {...register('title')} id="title" errorMessage={errors.title?.message} />
 			</div>
 			<div className="my-10">
-				<Label htmlFor="text">
-					Post Description
-				</Label>
+				<Label htmlFor="text">Post Description</Label>
 				<Textarea {...register('text')} id="text" placeholder="Type your post description" />
 			</div>
 			<Button type="submit" className="text-xl">
