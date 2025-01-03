@@ -62,9 +62,7 @@ export const ActivityReport = () => {
 			</h3>
 			<form className="mt-10 grid gap-10" onSubmit={handleSubmit((data) => generateReportMutation(data))}>
 				<div>
-					<Label htmlFor="email" isRequired>
-						Email
-					</Label>
+					<Label htmlFor="email">Email</Label>
 					<Input
 						{...register('email')}
 						type="text"
