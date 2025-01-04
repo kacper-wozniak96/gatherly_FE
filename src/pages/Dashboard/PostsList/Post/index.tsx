@@ -2,6 +2,7 @@ import { AppRoutes } from '@/components/routes/AppRoutes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiPostRoutes } from '@/services/api/postRoutes';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
@@ -14,15 +15,16 @@ export const SinglePost = (props: PostProps) => {
 	const { post } = props;
 
 	const queryClient = useQueryClient();
+	const { handleError } = useHandleError();
 
 	const { mutateAsync: upVotePost } = useMutation({
 		mutationFn: async () => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.upVotePost(post.id));
-			} catch (error) {}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 
@@ -30,10 +32,10 @@ export const SinglePost = (props: PostProps) => {
 		mutationFn: async () => {
 			try {
 				await appAxiosInstance.post(ApiPostRoutes.downVotePost(post.id));
-			} catch (error) {}
-		},
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+				queryClient.invalidateQueries({ queryKey: [ReactQueryKeys.fetchPosts] });
+			} catch (error) {
+				handleError(error);
+			}
 		},
 	});
 

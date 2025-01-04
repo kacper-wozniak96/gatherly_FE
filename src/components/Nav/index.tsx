@@ -1,13 +1,34 @@
+import { useHandleError } from '@/hooks/useHandleError';
+import { appAxiosInstance } from '@/services/api/axios,';
+import { ApiUserRoutes } from '@/services/api/userRoutes';
+import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { useMutation } from '@tanstack/react-query';
+import { useSnackbar } from 'notistack';
 import { BiSolidReport } from 'react-icons/bi';
-import { CiLogout } from 'react-icons/ci';
 import { IoMdSettings } from 'react-icons/io';
-import { MdSpaceDashboard } from 'react-icons/md';
-import { useLocation } from 'react-router-dom';
+import { MdLogout, MdSpaceDashboard } from 'react-icons/md';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AppRoutes } from '../routes/AppRoutes';
 import { Button } from '../ui/button';
 
 export const Nav = () => {
 	const location = useLocation();
+	const navigate = useNavigate();
+	const { enqueueSnackbar } = useSnackbar();
+	const { handleError } = useHandleError();
+
+	const { mutateAsync: logout } = useMutation({
+		mutationFn: async () => {
+			try {
+				await appAxiosInstance.post(ApiUserRoutes.userLogout);
+				enqueueSnackbar('Logged out successfully', { variant: 'success' });
+				localStorage.removeItem(localStorageUserIdKey);
+				navigate(AppRoutes.toSignIn);
+			} catch (error) {
+				handleError(error);
+			}
+		},
+	});
 
 	return (
 		<div className="flex flex-col justify-between items-center my-28 h-96">
@@ -45,6 +66,14 @@ export const Nav = () => {
 					<IoMdSettings className="text-4xl mr-4" />
 					<span className="text-2xl">Settings</span>
 				</a>
+				<Button
+					variant="ghost"
+					className="flex justify-start items-center text-gray-500 hover:bg-transparent hover:text-gray-500 my-10"
+					onClick={() => logout()}
+				>
+					<MdLogout className="text-4xl mr-5 rotate-180" />
+					<span className="text-2xl">Logout</span>
+				</Button>
 			</div>
 		</div>
 	);

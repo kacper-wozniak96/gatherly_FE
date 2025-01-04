@@ -6,4 +6,4 @@ export interface NewCommentProps {
 }
 
 export const createCommentFormSchema = commentSchema;
-export type CreateCommentFormValues = z.infer<typeof createCommentFormSchema>;
+export type CreateCommentFormTypes = z.infer<typeof createCommentFormSchema>;

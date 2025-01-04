@@ -9,7 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateCommentRequestDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { createCommentFormSchema, CreateCommentFormValues, NewCommentProps } from './types';
+import { createCommentFormSchema, CreateCommentFormTypes, NewCommentProps } from './types';
 
 export const NewComment = ({ post }: NewCommentProps) => {
 	const queryClient = useQueryClient();
@@ -22,12 +22,12 @@ export const NewComment = ({ post }: NewCommentProps) => {
 		setError,
 		reset,
 		formState: { errors },
-	} = useForm<CreateCommentFormValues>({
+	} = useForm<CreateCommentFormTypes>({
 		resolver: zodResolver(createCommentFormSchema),
 	});
 
 	const { mutateAsync: createComment } = useMutation({
-		mutationFn: async (data: CreateCommentFormValues) => {
+		mutationFn: async (data: CreateCommentFormTypes) => {
 			try {
 				const dto: CreateCommentRequestDTO = {
 					comment: data.comment as string,

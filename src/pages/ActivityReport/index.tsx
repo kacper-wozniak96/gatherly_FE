@@ -7,42 +7,41 @@ import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
+import { GenerateUserActivityReportRequestDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaArrowLeft } from 'react-icons/fa';
 import { FaRegFilePdf } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { z } from 'zod';
-
-const generateReportForm = z.object({
-	email: z.string().email(),
-	reportId: z.string(),
-});
-
-type GenerateReportFormValues = z.infer<typeof generateReportForm>;
+import { formSchema, GenerateReportFormTypes } from './types';
 
 export const ActivityReport = () => {
 	const navigate = useNavigate();
 	const { handleError } = useHandleError();
 	const { enqueueSnackbar } = useSnackbar();
 
-	const fileId = useMemo(() => uuidv4(), []);
-
 	const {
 		register,
 		handleSubmit,
 		setError,
 		formState: { errors },
-	} = useForm<GenerateReportFormValues>({
-		resolver: zodResolver(generateReportForm),
+	} = useForm<GenerateReportFormTypes>({
+		resolver: zodResolver(formSchema),
+		defaultValues: {
+			reportId: uuidv4(),
+		},
 	});
 
 	const { mutateAsync: generateReportMutation } = useMutation({
-		mutationFn: async (data: GenerateReportFormValues) => {
+		mutationFn: async (data: GenerateReportFormTypes) => {
 			try {
-				await appAxiosInstance.post(ApiUserRoutes.generateActivityReport, data);
+				const dto: GenerateUserActivityReportRequestDTO = {
+					email: data.email,
+					reportId: data.reportId,
+				};
+
+				await appAxiosInstance.post(ApiUserRoutes.generateActivityReport, dto);
 				enqueueSnackbar(
 					'The report is being generated and will be delivered to the provided e-mail address within the next few minutes',
 					{ variant: 'success' }
@@ -78,7 +77,6 @@ export const ActivityReport = () => {
 						type="text"
 						readOnly
 						inputClassName="opacity-50 cursor-not-allowed focus:outline-none focus:none focus:ring-none focus:outline-none focus:ring-0 focus:border-transparent"
-						value={fileId}
 					/>
 				</div>
 				<div>
