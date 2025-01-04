@@ -17,7 +17,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { formSchema, FormTypes, Props } from './types';
 
-export const Form = ({ user }: Props) => {
+export const BasicUserInformation = ({ user }: Props) => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 	const { handleError } = useHandleError();
@@ -64,42 +64,47 @@ export const Form = ({ user }: Props) => {
 	};
 
 	return (
-		<form className="my-12 grid gap-5" onSubmit={handleSubmit((data) => updateUserMutation(data))}>
-			<div className="flex items-center">
-				<Avatar className="w-20 h-20 mr-5">
-					<AvatarImage src={fileUrl ?? user?.avatarSignedURL ?? ''} alt="useravatar" />
-					<AvatarFallback className="text-4xl">{getFirstLetterOfUsername(user as UserDTO)}</AvatarFallback>
-				</Avatar>
-				<div className="grow">
-					<Label htmlFor="picture">Avatar</Label>
+		<div>
+			<h2 className="text-2xl font-semibold">Basic user information</h2>
+			<form className="my-12 grid gap-5" onSubmit={handleSubmit((data) => updateUserMutation(data))}>
+				<div className="flex items-center">
+					<Avatar className="w-20 h-20 mr-5">
+						<AvatarImage src={fileUrl ?? user?.avatarSignedURL ?? ''} alt="useravatar" />
+						<AvatarFallback className="text-4xl">
+							{getFirstLetterOfUsername(user as UserDTO)}
+						</AvatarFallback>
+					</Avatar>
+					<div className="grow">
+						<Label htmlFor="picture">Avatar</Label>
+						<Input
+							{...register('avatar')}
+							id="picture"
+							type="file"
+							errorMessage={errors?.avatar?.message as any}
+							onChange={handleFileChange}
+						/>
+					</div>
+				</div>
+				<div>
+					<Label htmlFor="username">New username</Label>
 					<Input
-						{...register('avatar')}
-						id="picture"
-						type="file"
-						errorMessage={errors?.avatar?.message as any}
-						onChange={handleFileChange}
+						{...register('username')}
+						id="username"
+						placeholder="Username"
+						errorMessage={errors?.username?.message}
 					/>
 				</div>
-			</div>
-			<div>
-				<Label htmlFor="username">New username</Label>
-				<Input
-					{...register('username')}
-					id="username"
-					placeholder="Username"
-					errorMessage={errors?.username?.message}
-				/>
-			</div>
-			<div className="flex justify-end">
-				<Button className="text-xl" type="submit">
-					Update
-				</Button>
-				<Link to={AppRoutes.toDashboard}>
-					<Button className="ml-2 text-xl" variant="outline">
-						Cancel
+				<div className="flex justify-end">
+					<Button className="text-xl" type="submit">
+						Update
 					</Button>
-				</Link>
-			</div>
-		</form>
+					<Link to={AppRoutes.toDashboard}>
+						<Button className="ml-2 text-xl" variant="outline">
+							Cancel
+						</Button>
+					</Link>
+				</div>
+			</form>
+		</div>
 	);
 };

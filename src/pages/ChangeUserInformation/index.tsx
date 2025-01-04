@@ -1,3 +1,4 @@
+import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
@@ -5,7 +6,8 @@ import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { UserDTO } from 'gatherly-types';
-import { Form } from './Form';
+import { BasicUserInformation } from './BasicUserInformation';
+import { ChangeUserPasswordForm } from './UserPassword';
 
 export const ChangeUserInformation = () => {
 	const {
@@ -31,5 +33,11 @@ export const ChangeUserInformation = () => {
 		return <div>Loading...</div>;
 	}
 
-	return <Form user={user} />;
+	return (
+		<div className="my-6 grid gap-16">
+			<BasicUserInformation user={user} />
+			<Separator className="h-0.5 bg-gray-400" />
+			<ChangeUserPasswordForm user={user} />
+		</div>
+	);
 };
