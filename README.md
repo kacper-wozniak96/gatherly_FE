@@ -19,3 +19,5 @@
 🛠️ Technologies Used
 Core Stack
 <ul> <li><strong>React</strong>: A JavaScript library for building user interfaces.</li> <li><strong>shadcn</strong>: A collection of reusable UI components for building modern web applications.</li> <li><strong>Tailwind CSS</strong>: A utility-first CSS framework for rapid UI development.</li> <li><strong>React Query</strong>: A data-fetching library for managing server state and caching.</li> <li><strong>Zod</strong>: A TypeScript-first schema validation library for runtime validation.</li> </ul>
+
+<h2>🚧 <strong>Project Status</strong></h2> <p> The Gatherly <strong>Frontend</strong> and <strong>Backend</strong> are currently under active development. New features, improvements, and bug fixes are being implemented regularly. Contributions, feedback, and suggestions are welcome! Feel free to open an issue or submit a pull request if you'd like to contribute. </p>
