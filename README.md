@@ -1,4 +1,4 @@
-<h1 align="center">Gatherly Frontend</h1><p align="center"> <strong>Gatherly</strong> is a feature-rich forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless and responsive user experience. </p>
+<h1 align="left">Gatherly Frontend</h1><p align="center"> <strong>Gatherly</strong> is a forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless user experience. </p>
 🚀 Key Features
 <br>
 <br>
