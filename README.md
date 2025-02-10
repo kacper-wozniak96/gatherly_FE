@@ -1,5 +1,7 @@
 <h1 align="center">Gatherly Frontend</h1><p align="center"> <strong>Gatherly</strong> is a feature-rich forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless and responsive user experience. </p>
 🚀 Key Features
+<br>
+<br>
 👤 User Management
 <ul> <li><strong>Sign Up</strong>: Users can create an account to participate in the forum.</li> <li><strong>Sign In</strong>: Registered users can log in to access their accounts.</li> <li><strong>Logout</strong>: Users can securely log out of their accounts.</li> </ul>
 📝 Post Management
@@ -8,6 +10,8 @@
 <ul> <li><strong>Upvote Post</strong>: Users can upvote posts they find valuable or interesting.</li> <li><strong>Downvote Post</strong>: Users can downvote posts they disagree with or find unhelpful.</li> </ul>
 💬 Comment Management
 <ul> <li><strong>Add Comment</strong>: Users can comment on posts to share their thoughts.</li> <li><strong>Delete Comment</strong>: Users can remove their comments if needed.</li> </ul>
+📊 Activity Reports
+<ul> <li><strong>Generate PDF Report</strong>: Users can generate a PDF report of their activity in the app, including: <ul> <li>Number of created posts</li> <li>Number of created comments</li> <li>Total upvotes and downvotes received</li> <li>Other relevant activity metrics</li> </ul> </li> <li><strong>Email Delivery</strong>: The generated PDF report is sent directly to the user's email.</li> </ul>
 🛡️ Moderation Features
 <ul> <li><strong>Post Bans</strong>: <ul> <li>Ban a user from adding comments to a specific post.</li> <li>Ban a user from viewing a specific post.</li> <li>Ban a user from upvoting or downvoting a specific post.</li> </ul> </li> </ul>
 🛠️ Technologies Used
