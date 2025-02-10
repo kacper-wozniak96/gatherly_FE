@@ -1,3 +1,5 @@
+![home-3ec0b8a0](https://github.com/user-attachments/assets/0cf1dbbf-f0c0-4791-9e37-1a53004f4d4a)
+
 <h1 align="left">Gatherly Frontend</h1><p align="center"> <strong>Gatherly</strong> is a forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless user experience. </p>
 🚀 Key Features
 <br>
