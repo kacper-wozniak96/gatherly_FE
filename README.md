@@ -1,6 +1,6 @@
 ![home-3ec0b8a0](https://github.com/user-attachments/assets/0cf1dbbf-f0c0-4791-9e37-1a53004f4d4a)
 
-<h1 align="left">Gatherly Frontend</h1><p align="center"> <strong>Gatherly</strong> is a forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless user experience. </p>
+<h1>Gatherly Frontend</h1><p> <strong>Gatherly</strong> is a forum application where users can create posts, comment on them, and upvote or downvote posts based on their preferences. This repository contains the frontend implementation of Gatherly, built with modern technologies to ensure a seamless user experience. </p>
 🚀 Key Features
 <br>
 <br>
@@ -20,4 +20,4 @@
 Core Stack
 <ul> <li><strong>React</strong>: A JavaScript library for building user interfaces.</li> <li><strong>shadcn</strong>: A collection of reusable UI components for building modern web applications.</li> <li><strong>Tailwind CSS</strong>: A utility-first CSS framework for rapid UI development.</li> <li><strong>React Query</strong>: A data-fetching library for managing server state and caching.</li> <li><strong>Zod</strong>: A TypeScript-first schema validation library for runtime validation.</li> </ul>
 
-<h2>🚧 <strong>Project Status</strong></h2> <p> The Gatherly <strong>Frontend</strong> and <strong>Backend</strong> are currently under active development. New features, improvements, and bug fixes are being implemented regularly. Contributions, feedback, and suggestions are welcome! Feel free to open an issue or submit a pull request if you'd like to contribute. </p>
+<h2>🚧 <strong>Project Status</strong></h2> <p> The Gatherly <strong>Frontend</strong> and <strong>Backend</strong> are currently under active development. New features, improvements, and bug fixes are being implemented regularly. </p>
