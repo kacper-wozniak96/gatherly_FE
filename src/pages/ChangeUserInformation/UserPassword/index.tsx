@@ -7,7 +7,7 @@ import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageUserIdKey } from '@/utils/localStorageKeys';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { avatarFileKeyOnUserUpdate, UpdateUserRequestDTO, UserDTO, usernameKeyOnUserUpdate } from 'gatherly-types';

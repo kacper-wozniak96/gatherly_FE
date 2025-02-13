@@ -38,6 +38,8 @@ export const Dashboard = () => {
 		},
 	});
 
+	console.log({ data });
+
 	const handlePageChange = (page: number) => {
 		setSelectedPage(page);
 	};

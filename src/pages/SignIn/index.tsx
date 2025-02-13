@@ -6,9 +6,9 @@ import { Label } from '@/components/ui/label';
 import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageAccessTokenKey, localStorageUserIdKey } from '@/utils/localStorageKeys';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { LoginUserRequestDTO, LoginUserResponseDTO } from 'gatherly-types';
 import { useSnackbar } from 'notistack';
@@ -21,6 +21,7 @@ export const SignIn = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 	const { handleError } = useHandleError();
+	const queryClient = useQueryClient();
 
 	const {
 		register,
@@ -36,11 +37,9 @@ export const SignIn = () => {
 			try {
 				const dto: LoginUserRequestDTO = data;
 
-				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(
-					ApiUserRoutes.login,
-					dto
-				);
-				handleLoginSuccess(response);
+				const response: AxiosResponse<LoginUserResponseDTO & { accessToken: string }> =
+					await appAxiosInstance.post(ApiUserRoutes.login, dto);
+				await handleLoginSuccess(response);
 			} catch (error) {
 				handleError(error, setError);
 			}
@@ -55,20 +54,22 @@ export const SignIn = () => {
 					password: 'guest',
 				};
 
-				const response: AxiosResponse<LoginUserResponseDTO> = await appAxiosInstance.post(
-					ApiUserRoutes.login,
-					dto
-				);
-				handleLoginSuccess(response);
+				const response: AxiosResponse<LoginUserResponseDTO & { accessToken: string }> =
+					await appAxiosInstance.post(ApiUserRoutes.login, dto);
+				await handleLoginSuccess(response);
 			} catch (error) {
 				handleError(error, setError);
 			}
 		},
 	});
 
-	function handleLoginSuccess(response: AxiosResponse<LoginUserResponseDTO>) {
+	async function handleLoginSuccess(response: AxiosResponse<LoginUserResponseDTO & { accessToken: string }>) {
 		const userId = response.data.user.id;
 		localStorage.setItem(localStorageUserIdKey, String(userId));
+		localStorage.setItem(localStorageAccessTokenKey, response.data.accessToken);
+		// await queryClient.invalidateQueries();
+		// queryClient.clear();
+		// window.location.reload();
 		navigate(AppRoutes.toDashboard);
 		enqueueSnackbar('Successfully signed in', { variant: 'success' });
 	}

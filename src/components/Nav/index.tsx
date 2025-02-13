@@ -1,8 +1,8 @@
 import { useHandleError } from '@/hooks/useHandleError';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
-import { useMutation } from '@tanstack/react-query';
+import { localStorageAccessTokenKey, localStorageUserIdKey } from '@/utils/localStorageKeys';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
 import { BiSolidReport } from 'react-icons/bi';
 import { IoMdSettings } from 'react-icons/io';
@@ -16,14 +16,19 @@ export const Nav = () => {
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 	const { handleError } = useHandleError();
+	const queryClient = useQueryClient();
 
 	const { mutateAsync: logout } = useMutation({
 		mutationFn: async () => {
 			try {
+				localStorage.removeItem(localStorageAccessTokenKey);
+				localStorage.removeItem(localStorageUserIdKey);
 				await appAxiosInstance.post(ApiUserRoutes.userLogout);
 				enqueueSnackbar('Logged out successfully', { variant: 'success' });
-				localStorage.removeItem(localStorageUserIdKey);
 				navigate(AppRoutes.toSignIn);
+				queryClient.clear();
+				await queryClient.invalidateQueries();
+				await queryClient.resetQueries();
 			} catch (error) {
 				handleError(error);
 			}

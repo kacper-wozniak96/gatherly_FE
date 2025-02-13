@@ -2,7 +2,7 @@ import { Separator } from '@/components/ui/separator';
 import { appAxiosInstance } from '@/services/api/axios,';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
 import { ApiUserRoutes } from '@/services/api/userRoutes';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageUserIdKey } from '@/utils/localStorageKeys';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import { UserDTO } from 'gatherly-types';

@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getFirstLetterOfUsername } from '@/utils/getFirstLetterOfUsername';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageUserIdKey } from '@/utils/localStorageKeys';
 import { Separator } from '@radix-ui/react-separator';
 import { DeleteButton } from './DeleteButton';
 import { Props } from './types';

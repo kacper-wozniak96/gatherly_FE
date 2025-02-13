@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useHandleError } from '@/hooks/useHandleError';
 import { ReactQueryKeys } from '@/services/api/ReactQueryKeys/reactQueryKeys';
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageUserIdKey } from '@/utils/localStorageKeys';
 import { PostDTO } from 'gatherly-types';
 import { RiUserSettingsFill } from 'react-icons/ri';
 import { PostBreadcrumbs } from './Breadcrumbs';

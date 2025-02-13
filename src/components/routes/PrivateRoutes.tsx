@@ -1,4 +1,4 @@
-import { localStorageUserIdKey } from '@/utils/localStorageUserIdKey';
+import { localStorageAccessTokenKey, localStorageUserIdKey } from '@/utils/localStorageKeys';
 import Cookies from 'js-cookie';
 import { Navigate, Outlet } from 'react-router-dom';
 import { Nav } from '../Nav';
@@ -6,8 +6,11 @@ import { Nav } from '../Nav';
 export const PrivateRoutes = () => {
 	// const token = Cookies.get('accessToken');
 	const userId = localStorage.getItem(localStorageUserIdKey);
+	const aceessToken = localStorage.getItem(localStorageAccessTokenKey);
 
-	return userId ? (
+	console.log({ aceessToken, userId });
+
+	return aceessToken ? (
 		<div className="flex justify-center w-screen h-screen bg-slate-200">
 			<nav className="w-[20rem]">
 				<Nav />
