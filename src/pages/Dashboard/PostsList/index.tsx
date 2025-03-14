@@ -15,6 +15,7 @@ export const PostsList = () => {
 	if (!posts || !postsTotalCount) {
 		return <NoPosts />;
 	}
+
 	return (
 		<>
 			<div>

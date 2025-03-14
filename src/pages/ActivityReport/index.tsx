@@ -15,6 +15,7 @@ import { FaRegFilePdf } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { formSchema, GenerateReportFormTypes } from './types';
+import { ApiPostRoutes } from '@/services/api/postRoutes';
 
 export const ActivityReport = () => {
 	const navigate = useNavigate();
@@ -41,7 +42,7 @@ export const ActivityReport = () => {
 					reportId: data.reportId,
 				};
 
-				await appAxiosInstance.post(ApiUserRoutes.generateActivityReport, dto);
+				await appAxiosInstance.post(ApiPostRoutes.generateActivityReport, dto);
 				enqueueSnackbar(
 					'The report is being generated and will be delivered to the provided e-mail address within the next few minutes',
 					{ variant: 'success' }

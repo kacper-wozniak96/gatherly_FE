@@ -11,4 +11,5 @@ export class ApiPostRoutes {
 	static deleteComment = (postId: number, commentId: number) => `/post/${postId}/comment/${commentId}`;
 	static deletePost = (postId: number) => `/post/${postId}`;
 	static applyPostBans = (postId: number, bannedUserId: number) => `/post/${postId}/bans/user/${bannedUserId}`;
+	static generateActivityReport = `/post/activityReport`;
 }
